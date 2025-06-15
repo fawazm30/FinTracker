@@ -54,18 +54,19 @@ body {
 }
 .dashboard-header-flex {
     display: flex;
-    align-items: stretch;
+    align-items: center;
     justify-content: space-between;
-    gap: 0;
-    margin-top: 60px;
-    margin-left: 350px;
+    gap: 32px;
     width: 800px;
+    margin: 28px auto 0 auto; /* Center horizontally, spacing from top */
     border-radius: 20px;
     background: #e48b26;
     position: relative;
     z-index: 1;
-    min-height: 250px;
-    /* Match the look of .budget-overview on the budget page */
+    min-height: 400px;
+    box-sizing: border-box;
+    left: 90px;
+    height: 450px;
 }
 
 .dashboard {
@@ -325,19 +326,6 @@ body {
   padding: 0;
 }
 
-.dashboard-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-}
-
-.dashboard-chart-container {
-  min-width: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 @media (max-width: 700px) {
   .dashboard-header-flex {
@@ -352,25 +340,6 @@ body {
 main {
   margin-left: 260px; /* Make sure this matches the sidebar width */
   padding: 32px 0 0 0;
-}
-
-.dashboard-header-flex {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-  margin-bottom: 24px;
-}
-
-.dashboard-header-flex h1 {
-  flex: 1;
-}
-
-.dashboard-chart-container {
-  min-width: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 /* Responsive: stack on mobile */
