@@ -57,7 +57,7 @@ body {
     position: absolute;
     top: 60px;
     left: 350px;
-    height: 60vh;
+    height: 55vh;
     width: 800px;
     color: black;
     border-radius: 20px;
@@ -73,10 +73,10 @@ body {
 }
 .add-budget {
     position: absolute;
-    top: 530px;
+    top: 495px;
     left: 350px;
     width: 800px;
-    height: 200px;
+    height: 130px;
     background: #ffffff;
     border-radius: 20px;
     padding: 20px;
@@ -125,4 +125,30 @@ body {
 .input-wrapper button:hover {
     border-color: #e48b26;
     color: #e48b26;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    min-width: 500px;
+}
+
+#budgetChart {
+    max-width: 300px;
+    max-height: 300px;
+    width: 100%;
+    height: auto;
+}
+
+.budget-summary {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.budget-details {
+    flex: 1;
 }

@@ -53,12 +53,16 @@
         <h1 class="budget-overview" id="welcome-text">Budget Overview</h1>
         <section class="budget-overview">
             <h2>Current Budget<span id="current-month"></span></h2>
-            <div class="budget-details">
-                <p>Total Budget: $<span id="total-budget">0.00</span></p>
-                <p>Spent: $<span id="spent-amount">0.00</span></p>
-                <p>Remaining: $<span id="remaining-amount">0.00</span></p>
+            <div class="budget-summary">
+                <div class="budget-details">
+                    <p>Total Budget: $<span id="total-budget">0.00</span></p>
+                    <p>Spent: $<span id="spent-amount">0.00</span></p>
+                    <p>Remaining: $<span id="remaining-amount">0.00</span></p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="budgetChart" width="200" height="200"></canvas>
+                </div>
             </div>
-            <canvas id="budgetChart" width="200" height="200"></canvas>
         </section>
         <section class="add-budget">
             <h2>Add your budget</h2>
