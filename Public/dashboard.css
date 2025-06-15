@@ -9,7 +9,7 @@
 }
 body {
     display: flex;
-    background-color:#576493;
+    background-color:#e2e2e2;
     overflow: auto;
 }
 .sidebar{
@@ -67,6 +67,7 @@ body {
     box-sizing: border-box;
     left: 90px;
     height: 450px;
+    box-shadow: 1px 0px 20px rgb(198, 198, 198);
 }
 
 .dashboard {
@@ -159,7 +160,7 @@ body {
     background-color: white;
     padding: 20px;
     border-radius: 20px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 1px 0px 20px rgb(198, 198, 198);
 }
 .add-transaction h2 {
     font-size: 24px;
