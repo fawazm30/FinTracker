@@ -58,6 +58,7 @@
                 <p>Spent: $<span id="spent-amount">0.00</span></p>
                 <p>Remaining: $<span id="remaining-amount">0.00</span></p>
             </div>
+            <canvas id="budgetChart" width="200" height="200"></canvas>
         </section>
         <section class="add-budget">
             <h2>Add your budget</h2>
@@ -72,6 +73,35 @@
             </form>
         </section>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let budgetChartInstance = null;
+
+        function renderBudgetChart(budget, spent) {
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            // Destroy previous chart if it exists for re-rendering
+            if (budgetChartInstance) {
+                budgetChartInstance.destroy();
+            }
+            budgetChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                labels: ['Spent', 'Remaining'],
+                datasets: [{
+                    data: [spent, Math.max(0, budget - spent)],
+                    backgroundColor: ['#e48b26', '#28a745'],
+                    borderWidth: 0
+                    }]
+                },
+                options: {
+                cutout: '70%',
+                    plugins: {
+                        legend: { display: true }
+                    }
+                }
+            });
+        }
+    </script>
     <script>
         async function fetchBudgetSummary() {
             try {
@@ -87,6 +117,8 @@
                 
                 document.getElementById('total-budget').textContent = totalBudget.toFixed(2);
                 document.getElementById('spent-amount').textContent = spent.toFixed(2);
+
+                renderBudgetChart(totalBudget, spent);
                 
                 // Color code remaining amount
                 const remainingElement = document.getElementById('remaining-amount');
