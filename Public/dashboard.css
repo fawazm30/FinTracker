@@ -78,9 +78,17 @@ body {
     font-size: 40px;
     font-weight: 600;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     flex: 2;
     min-width: 0;
+    flex-direction: column;
+}
+
+.dashboard-subtitle {
+    font-size: 24px;
+    margin-top: 12px;
+    color: #fff;
+    font-weight: 500;
 }
 
 .dashboard-chart-container {

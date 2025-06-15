@@ -51,7 +51,10 @@
     </div>
     <main>
         <div class="dashboard-header-flex">
-            <h1 class="dashboard" id="welcome-text">Welcome!</h1>
+            <div class="dashboard">
+                <h1 id="welcome-text">Welcome!</h1>
+                <p class="dashboard-subtitle">Your spending this month:</p>
+            </div>
             <div class="dashboard-chart-container">
                 <canvas id="dashboardBudgetChart" width="320" height="320"></canvas>
             </div>
@@ -190,6 +193,21 @@
 
         let dashboardBudgetChartInstance = null;
 
+        const centerTextPlugin = {
+            id: 'centerText',
+            afterDraw(chart, args, options) {
+                const {ctx, chartArea: {left, top, width, height}} = chart;
+                ctx.save();
+                ctx.font = 'bold 32px STIX Two Text, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#fff';
+                const spent = options.spentValue !== undefined ? options.spentValue : '';
+                ctx.fillText(`$${spent.toFixed(2)}`, left + width / 2, top + height / 2);
+                ctx.restore();
+            }
+        };
+
         function renderDashboardBudgetChart(budget, spent) {
             const ctx = document.getElementById('dashboardBudgetChart').getContext('2d');
             if (dashboardBudgetChartInstance) dashboardBudgetChartInstance.destroy();
@@ -206,9 +224,11 @@
                 options: {
                     cutout: '70%',
                     plugins: {
-                        legend: { display: true }
+                        legend: { display: true },
+                        centerText: { spentValue: spent } // <-- Pass spent value here
                     }
-                }
+                },
+                plugins: [centerTextPlugin] // <-- Register the plugin
             });
         }
 
