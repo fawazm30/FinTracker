@@ -53,7 +53,7 @@
         <div class="dashboard-header-flex">
             <h1 class="dashboard" id="welcome-text">Welcome!</h1>
             <div class="dashboard-chart-container">
-                <canvas id="dashboardBudgetChart" width="220" height="220"></canvas>
+                <canvas id="dashboardBudgetChart" width="320" height="320"></canvas>
             </div>
         </div>
         <section class="add-transaction">
@@ -199,7 +199,7 @@
                     labels: ['Spent', 'Remaining'],
                     datasets: [{
                         data: [spent, Math.max(0, budget - spent)],
-                        backgroundColor: ['#e48b26', '#28a745'],
+                        backgroundColor: ['#dc3545', '#28a745'],
                         borderWidth: 0
                     }]
                 },
