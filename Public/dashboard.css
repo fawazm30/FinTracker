@@ -67,7 +67,66 @@ body {
     padding-top: 10px;
     font-size: 40px;
     font-weight: 600;
+    display: flex;
+    align-items: center;
 }
+
+.dashboard-chart-container {
+    position: absolute;
+    top: 0;
+    left: 290px;
+    width: 400px;
+    height: 320px;
+    z-index: 0;
+    pointer-events: none;
+    /* Only show a portion of the chart peeking out */
+    overflow: visible;
+    display: block;
+}
+
+#dashboardBudgetChart {
+    width: 350px !important;
+    height: 350px !important;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
+/* Responsive for dashboard */
+@media (max-width: 1200px) {
+    .dashboard-header-flex {
+        flex-direction: column;
+        min-width: unset;
+        max-width: unset;
+        width: 95vw;
+        margin: 60px 2vw 24px 2vw;
+    }
+    .dashboard-chart-container {
+        margin-top: 16px;
+        width: 100%;
+        min-width: 180px;
+        max-width: 100%;
+    }
+}
+@media (max-width: 700px) {
+    .dashboard-header-flex {
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 20px 0 18px 0;
+        padding: 14px 8px 16px 10px;
+        min-width: unset;
+        max-width: unset;
+        width: 98vw;
+    }
+    .dashboard-chart-container {
+        margin-top: 16px;
+        width: 100%;
+        min-width: 140px;
+        max-width: 100%;
+    }
+}
+
+
 .add-transaction {
     position: absolute;
     top: 530px;
