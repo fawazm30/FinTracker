@@ -52,41 +52,52 @@ body {
     margin-right: 10px;
     fill: #e48b26; /* Change icon color */
 }
-.dashboard {
-    background: #e48b26;
-    position: absolute;
-    top: 60px;
-    left: 350px;
-    height: 60vh;
+.dashboard-header-flex {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 0;
+    margin-top: 60px;
+    margin-left: 350px;
     width: 800px;
-    color: white;
     border-radius: 20px;
+    background: #e48b26;
+    position: relative;
+    z-index: 1;
+    min-height: 250px;
+    /* Match the look of .budget-overview on the budget page */
+}
+
+.dashboard {
+    background: none;
+    color: white;
+    border-radius: 20px 0 0 20px;
     text-align: left;
-    padding-left: 20px;
-    padding-right: 30px;
-    padding-top: 10px;
+    padding: 32px 0 32px 32px;
     font-size: 40px;
     font-weight: 600;
     display: flex;
     align-items: center;
+    flex: 2;
+    min-width: 0;
 }
 
 .dashboard-chart-container {
-    position: absolute;
-    top: 0;
-    left: 290px;
-    width: 400px;
-    height: 320px;
-    z-index: 0;
-    pointer-events: none;
-    /* Only show a portion of the chart peeking out */
-    overflow: visible;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border-radius: 0 20px 20px 0;
+    min-width: 300px;
+    width: 320px;
+    padding: 20px 30px 20px 0;
+    position: relative;
+    z-index: 2;
 }
 
 #dashboardBudgetChart {
-    width: 350px !important;
-    height: 350px !important;
+    width: 220px !important;
+    height: 220px !important;
     max-width: 100%;
     max-height: 100%;
     display: block;
