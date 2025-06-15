@@ -152,3 +152,14 @@ body {
 .budget-details {
     flex: 1;
 }
+
+@media (max-width: 700px) {
+  .budget-summary-flex {
+    flex-direction: column;
+    align-items: center;
+  }
+  .chart-container {
+    justify-content: center;
+    margin-top: 20px;
+  }
+}

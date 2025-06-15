@@ -50,7 +50,12 @@
         </ul>
     </div>
     <main>
-        <h1 class="dashboard" id="welcome-text">Welcome!</h1>
+        <div class="dashboard-container">
+            <h1 class="dashboard" id="welcome-text">Welcome!</h1>
+            <div class="dashboard-chart-container">
+                <canvas id="dashboardBudgetChart" width="180" height="180"></canvas>
+            </div>
+        </div>
         <section class="add-transaction">
             <h2>Add Transaction</h2>
             <form id="transaction-form" method="POST" action="/add-transaction">
@@ -85,6 +90,7 @@
             <div id="transaction-list" class="transaction-history"></div>
         </section>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const name = params.get('firstname');
@@ -181,7 +187,43 @@
         });
 
         window.onload = fetchTransactions;
-</script>
+
+        let dashboardBudgetChartInstance = null;
+
+        function renderDashboardBudgetChart(budget, spent) {
+            const ctx = document.getElementById('dashboardBudgetChart').getContext('2d');
+            if (dashboardBudgetChartInstance) dashboardBudgetChartInstance.destroy();
+            dashboardBudgetChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Spent', 'Remaining'],
+                    datasets: [{
+                        data: [spent, Math.max(0, budget - spent)],
+                        backgroundColor: ['#e48b26', '#28a745'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    cutout: '70%',
+                    plugins: {
+                        legend: { display: true }
+                    }
+                }
+            });
+        }
+
+        async function loadDashboardBudgetChart() {
+            try {
+                const response = await fetch('/budget-summary');
+                const data = await response.json();
+                renderDashboardBudgetChart(data.totalBudget, data.spent);
+            } catch (e) {
+                    // Optionally handle error
+                }
+            }
+
+            window.addEventListener('DOMContentLoaded', loadDashboardBudgetChart);
+    </script>
 
 </body>
 </html>
