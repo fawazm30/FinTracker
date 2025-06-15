@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+    font-family: 'STIX Two Text', sans-serif;
+}
+body {
+    display: flex;
+    background-color:#576493;
+    overflow: auto;
+}
+.sidebar{
+    position: absolute;
+    top: 60px;
+    left: 60px;
+    width: 250px;
+    height: 100vh;
+    background: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+}
+.main {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.main li {
+    margin: 20px 0;
+}
+.main a {
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Remove underline */
+    color: black; /* Change text color */
+    font-size: 18px; /* Adjust font size */
+    font-weight: 500; /* Adjust font weight */
+    padding: 10px;
+    transition: background-color 0.2s ease;
+    border-radius: 8px;
+}
+.main a:hover {
+    background: #f2f2f2; /* Change background color on hover */
+    color: #e48b26;
+}
+.main svg {
+    margin-right: 10px;
+    fill: #e48b26; /* Change icon color */
+}
+.dashboard {
+    background: #e48b26;
+    position: absolute;
+    top: 60px;
+    left: 350px;
+    height: 60vh;
+    width: 800px;
+    color: white;
+    border-radius: 20px;
+    text-align: left;
+    padding-left: 20px;
+    padding-right: 30px;
+    padding-top: 10px;
+    font-size: 40px;
+    font-weight: 600;
+}
+.add-transaction {
+    position: absolute;
+    top: 530px;
+    left: 350px;
+    width: 800px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.add-transaction h2 {
+    font-size: 24px;
+    margin-bottom: 9px;
+    color: #333;
+}
+.add-transaction form {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.add-transaction input[type="text"] {
+    flex: 2;
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 50px;
+    border: none;
+    min-width: 120px;
+}
+.add-transaction input {
+    flex: 1;
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 50px;
+    border: none;
+    min-width: 120px;
+}
+.add-transaction select {
+    flex: 1;
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 50px;
+    border: none;
+    min-width: 120px;
+}
+.add-transaction button {
+    flex: 1;
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 50px;
+    border: 1px solid #ccc;
+    min-width: 120px;
+}
+.amount-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 120px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    padding: 0 10px;
+}
+
+.amount-wrapper .dollar-sign {
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.amount-wrapper input {
+    border: none;
+    outline: none;
+    padding: 10px 0;
+    font-size: 12px;
+    width: 100%;
+    background: transparent;
+}
+.source-wrapper {
+    display: flex;
+    flex: 2;
+}
+.category-wrapper {
+    display: flex;
+}
+/* Chrome, Safari, Edge, Opera */
+.amount-wrapper input::-webkit-outer-spin-button,
+.amount-wrapper input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.add-transaction button:hover,
+.amount-wrapper:hover,
+.date-wrapper:hover,
+.source-wrapper:hover,
+.category-wrapper:hover {
+    border-color: #e48b26;
+}
+.source-wrapper,
+.category-wrapper,
+.date-wrapper {
+    border: 1px solid #ccc;
+    border-radius: 50px;
+}
+.add-transaction input[type="date"],
+.add-transaction select {
+    color: #888; /* Same gray as other inputs */
+}
+.add-transaction select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: transparent;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23888' d='M2 0L0 2h4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 0.65em auto;
+    padding-right: 1.5rem;
+}
+.transaction-item {
+  display: grid;
+  grid-template-columns: 160px 100px 1fr 120px 32px; /* Date, Amount, Description, Category, Delete */
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 12px 24px;
+  background: #fff;
+  border-radius: 32px;
+  margin-bottom: 18px;
+  box-sizing: border-box;
+}
+.transaction-item .positive {
+  color: green;
+  font-weight: bold;
+}
+
+.transaction-item .negative {
+  color: red;
+  font-weight: bold;
+}
+
+.transaction-item button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  min-width: 0;
+  padding: 0;
+}
+.transaction-header {
+    margin-top: 15px;
+    font-size: 20px;
+}
+.transaction-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
+  flex: 1 1 auto;
+  word-break: break-word;
+}
+.delete-btn {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.delete-btn:hover {
+  background-color: rgba(192, 0, 0, 0.1);
+}
+.delete-btn svg {
+  width: 14px !important;
+  height: 14px !important;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+

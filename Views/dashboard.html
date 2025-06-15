@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashboardFinTracker</title>
+    <link rel="stylesheet" href="/dashboard.css">
+    <!-- <script type="text/javascript" src="/validation.js" defer></script> -->
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo"></div>
+        <ul class="main">
+            <li>
+                <a href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Z"/></svg>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="profile.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
+                    <span>Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="budget.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M120-80v-800l60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60v800l-60-60-60 60-60-60-60 60-60-60-60 60-60-60-60 60-60-60-60 60-60-60-60 60Zm120-200h480v-80H240v80Zm0-160h480v-80H240v80Zm0-160h480v-80H240v80Z"/></svg>
+                    <span>Budget</span>
+                </a>
+            </li>
+            <li>
+                <a href="reports.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z"/></svg>
+                    <span>Reports</span>
+                </a>
+            </li>
+            <li>
+                <a href="settings.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm112-260q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Z"/></svg>
+                    <span>Settings</span>
+                </a>
+            </li>
+            <li>
+                <a href="/logout" class="logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <main>
+        <h1 class="dashboard" id="welcome-text">Welcome!</h1>
+        <section class="add-transaction">
+            <h2>Add Transaction</h2>
+            <form id="transaction-form" method="POST" action="/add-transaction">
+                <div class="date-wrapper input-wrapper">
+                    <input id="date-input" type="date" name="date" required />
+                </div>
+                <div class="amount-wrapper input-wrapper">
+                    <span class="dollar-sign">$</span>
+                        <input id="amount-input" type="number" name="amount" placeholder="Amount" required />
+                </div>
+                <div class="source-wrapper input-wrapper">
+                    <input id="description-input" type="text" name="description" placeholder="Transaction Description"/>
+                </div>
+                <div class="category-wrapper input-wrapper">
+                    <select id="category-input" name="category" required>
+                        <option value="" disabled selected>Select Category</option>
+                        <option value="Work">Work</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Dining Out">Dining Out</option>
+                        <option value="Personal">Personal</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Education">Education</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="input-wrapper">
+                    <button id="add-transaction-button" type="button">Add Transaction</button>
+                </div>
+        </form>
+            <h2 class="transaction-header">Transaction History</h2>
+            <div id="transaction-list" class="transaction-history"></div>
+        </section>
+    </main>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('firstname');
+        const userId = params.get('userId'); // <- capture userId
+        if (name) {
+            document.getElementById('welcome-text').textContent = `Welcome, ${name}!`;
+        }
+        // Set userId to button data attribute
+        document.getElementById('add-transaction-button').dataset.userId = userId;
+    </script>
+    <script>
+        document.getElementById('add-transaction-button').addEventListener('click', async () => {
+            let dateInput = document.getElementById('date-input').value;
+            const now = new Date();
+            const time = now.toTimeString().split(' ')[0];
+            const date = `${dateInput} ${time}`;
+
+            const amount = parseFloat(document.getElementById('amount-input').value);
+            const description = document.getElementById('description-input').value;
+            const category = document.getElementById('category-input').value;
+            const userId = document.getElementById('add-transaction-button').dataset.userId;
+
+            const response = await fetch('/add-transaction', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId, date, amount, description, category })
+            });
+
+            if (response.ok) {
+                document.getElementById('transaction-form').reset();
+                fetchTransactions();  // ✅ REFRESH instead of creating element
+            } else {
+                console.error("Error adding transaction");
+            }
+        });
+
+    </script>
+    <script>
+        async function fetchTransactions() {
+            const response = await fetch('/transactions');
+            const transactions = await response.json();
+
+            const list = document.getElementById('transaction-list');
+            list.innerHTML = ''; // Clear previous
+
+            transactions.forEach(tx => {
+                const li = document.createElement('li');
+                li.classList.add('transaction-item');
+
+                const amountClass = tx.amount < 0 ? 'negative' : 'positive';
+                const formattedAmount = tx.amount < 0
+                    ? `-$${Math.abs(tx.amount).toFixed(2)}`
+                    : `$${Math.abs(tx.amount).toFixed(2)}`;
+
+        
+                li.innerHTML = `
+                    <span class="transaction-date">${new Date(tx.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                    <span class="transaction-amount ${amountClass}">${formattedAmount}</span>
+                    <span class="transaction-desc">${tx.description}</span>
+                    <span class="transaction-category">${tx.category}</span>
+                    <button onclick="deleteTransaction('${tx.id}')" class="delete-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 -960 960 960" width="14" fill="#c00">
+                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                        </svg>
+                    </button>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        async function deleteTransaction(id) {
+            await fetch(`/transactions/${id}`, { method: 'DELETE' });
+            fetchTransactions(); // Refresh list
+        }
+
+        document.getElementById('transaction-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const data = {
+                date: this.date.value,
+                amount: this.amount.value,
+                description: this.description.value,
+                category: this.category.value
+            };
+
+            await fetch('/add-transaction', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            this.reset(); // clear form
+            fetchTransactions(); // update UI
+        });
+
+        window.onload = fetchTransactions;
+</script>
+
+</body>
+</html>

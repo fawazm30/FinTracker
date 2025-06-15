@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+    font-family: 'STIX Two Text', sans-serif;
+}
+body {
+    display: flex;
+    background-color:#576493;
+    overflow: auto;
+}
+.sidebar{
+    position: absolute;
+    top: 60px;
+    left: 60px;
+    width: 250px;
+    height: 100vh;
+    background: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+}
+.main {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.main li {
+    margin: 20px 0;
+}
+.main a {
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Remove underline */
+    color: black; /* Change text color */
+    font-size: 18px; /* Adjust font size */
+    font-weight: 500; /* Adjust font weight */
+    padding: 10px;
+    transition: background-color 0.2s ease;
+    border-radius: 8px;
+}
+.main a:hover {
+    background: #f2f2f2; /* Change background color on hover */
+    color: #e48b26;
+}
+.main svg {
+    margin-right: 10px;
+    fill: #e48b26; /* Change icon color */
+}
