@@ -52,7 +52,7 @@
     <main>
         <h1 class="budget-overview" id="welcome-text">Budget Overview</h1>
         <section class="budget-overview">
-            <h2>Current Budget</h2>
+            <h2>Current Budget<span id="current-month"></span></h2>
             <div class="budget-details">
                 <p>Total Budget: $<span id="total-budget">0.00</span></p>
                 <p>Spent: $<span id="spent-amount">0.00</span></p>
@@ -146,5 +146,17 @@
 
         // Initial load
         window.addEventListener('DOMContentLoaded', fetchBudgetSummary);
+        document.addEventListener('DOMContentLoaded', function () {
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        const today = new Date();
+        const currentMonth = monthNames[today.getMonth()] + " " + today.getFullYear();
+        const monthSpan = document.getElementById('current-month');
+        if (monthSpan) {
+            monthSpan.textContent = `(${currentMonth})`;
+        }
+    });
     </script>
 </body>
