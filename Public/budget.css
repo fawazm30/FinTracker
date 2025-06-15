@@ -9,7 +9,7 @@
 }
 body {
     display: flex;
-    background-color:#576493;
+    background-color:#e2e2e2;
     overflow: auto;
 }
 .sidebar{
@@ -67,6 +67,7 @@ body {
     padding-top: 10px;
     font-size: 20px;
     font-weight: 600;
+    box-shadow: 1px 0px 20px rgb(198, 198, 198);
 }
 .budget-details {
     font-weight: 500;

@@ -9,7 +9,7 @@
 }
 body {
     display: flex;
-    background-color:#576493;
+    background-color:#e2e2e2;
     overflow: auto;
 }
 .sidebar{
