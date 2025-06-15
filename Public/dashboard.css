@@ -91,6 +91,11 @@ body {
     font-weight: 500;
 }
 
+.dashboard-subtitle-2 {
+    font-size: 15px;
+    margin-top: 20px;
+}
+
 .dashboard-chart-container {
     display: flex;
     align-items: center;

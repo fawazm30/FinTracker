@@ -54,6 +54,7 @@
             <div class="dashboard">
                 <h1 id="welcome-text">Welcome!</h1>
                 <p class="dashboard-subtitle">Your spending this month:</p>
+                <p class="dashboard-subtitle-2">Check budget for more details</p>
             </div>
             <div class="dashboard-chart-container">
                 <canvas id="dashboardBudgetChart" width="320" height="320"></canvas>
@@ -204,6 +205,12 @@
                 ctx.fillStyle = '#fff';
                 const spent = options.spentValue !== undefined ? options.spentValue : '';
                 ctx.fillText(`$${spent.toFixed(2)}`, left + width / 2, top + height / 2);
+                ctx.restore();
+
+                // Draw the "spent" label below it
+                ctx.font = 'bold 18px STIX Two Text, sans-serif';
+                ctx.fillStyle = '#fff';
+                ctx.fillText('spent', left + width / 2, top + height / 2 + 22);
                 ctx.restore();
             }
         };
