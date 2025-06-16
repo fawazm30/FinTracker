@@ -379,11 +379,20 @@ async function startServer() {
             const days = [];
             for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
                 const dateStr = d.toISOString().slice(0,10);
-                const found = rows.find(r => r.day === dateStr);
+                const found = rows.find(r => {
+                  // r.day may be a Date object or string, normalize to yyyy-mm-dd string
+                  let dayStr;
+                  if (r.day instanceof Date) {
+                    dayStr = r.day.toISOString().slice(0, 10);
+                  } else if (typeof r.day === 'string' && r.day.length >= 10) {
+                    dayStr = r.day.slice(0, 10);
+                  } else {
+                    dayStr = String(r.day);
+                  }
+                  return dayStr === dateStr;
+                });
                 days.push({ day: dateStr, spent: found ? Number(found.spent) : 0 });
             }
-            console.log('Spending trend debug:', JSON.stringify(days, null, 2)); // debug
-            console.log('Spending trend raw rows:', rows);
             res.json(days);
         } catch (err) {
             console.error('Spending trend error:', err);
