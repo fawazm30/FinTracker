@@ -92,3 +92,33 @@ body {
     font-weight: bold;
     color: #e48b26;
 }
+
+.trend-section {
+    margin: 32px 0 24px 0;
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 24px 24px 16px 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.trend-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.trend-toggle button {
+    background: none;
+    border: 1px solid #e48b26;
+    color: #e48b26;
+    padding: 6px 18px;
+    border-radius: 5px;
+    margin-left: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+}
+.trend-toggle button.active,
+.trend-toggle button:hover {
+    background: #e48b26;
+    color: #fff;
+}
