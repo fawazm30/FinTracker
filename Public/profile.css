@@ -80,23 +80,61 @@ body {
 
 .profile-details input[type="text"],
 .profile-details input[type="email"] {
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+    padding: 8px 4px;
+    border: none;
+    border-bottom: 2px solid #d4d4d4;
+    border-radius: 0;
+    background: none;
+    font-size: 18px;
+    outline: none;
+    width: 350px;           /* wider for long emails */
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+    overflow: visible;      /* prevent ellipsis */
+    white-space: nowrap;    /* don't wrap, show all text in one line */
 }
 
-.profile-details button[type="submit"] {
-    margin-top: 14px;
-    padding: 10px 18px;
-    background: #e48b26;
-    color: white;
+.profile-details input[type="text"]:focus,
+.profile-details input[type="email"]:focus {
+    border-bottom: 2px solid #e48b26;
+}
+
+.profile-details .field-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.profile-details .edit-btn {
+    background: none;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
+    color: #333;
+    font-size: 15px;
     cursor: pointer;
+    padding: 0 4px;
+    font-weight: 500;
+    transition: color 0.15s;
+}
+.profile-details .edit-btn:hover {
+    color: #e48b26;
 }
 
 #profile-message {
     margin-top: 10px;
     font-weight: 600;
+}
+
+.save-btn {
+    padding: 10px 20px;
+    background: #e48b26;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 150px;
+    display: flex;
+    justify-content: center;
 }
