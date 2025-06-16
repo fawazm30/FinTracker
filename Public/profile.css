@@ -64,3 +64,39 @@ body {
     border-radius: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
+
+.profile-details form {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 380px;
+}
+
+.profile-details label {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.profile-details input[type="text"],
+.profile-details input[type="email"] {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.profile-details button[type="submit"] {
+    margin-top: 14px;
+    padding: 10px 18px;
+    background: #e48b26;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#profile-message {
+    margin-top: 10px;
+    font-weight: 600;
+}
