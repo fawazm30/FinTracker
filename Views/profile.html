@@ -53,20 +53,18 @@
         <div class="profile-container">
             <h1 class="profile-overview" id="welcome-text">Profile Overview</h1>
             <section class="profile-details">
-                <form id="profile-form">
+               <form id="profile-form">
                     <label for="firstname">First Name:</label>
-                    <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="field-row">
                         <input type="text" id="firstname" name="firstname" required readonly>
-                        <button type="button" id="edit-firstname">Edit</button>
+                        <button type="button" class="edit-btn" id="edit-firstname">Edit</button>
                     </div>
-                    <br/>
                     <label for="email">Email:</label>
-                    <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="field-row">
                         <input type="email" id="email" name="email" required readonly>
-                        <button type="button" id="edit-email">Edit</button>
+                        <button type="button" class="edit-btn" id="edit-email">Edit</button>
                     </div>
-                    <br/>
-                    <button type="submit">Save Changes</button>
+                    <button class="save-btn" type="submit">Save Changes</button>
                 </form>
                 <div id="profile-message"></div>
             </section>
