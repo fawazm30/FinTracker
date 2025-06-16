@@ -343,6 +343,52 @@ async function startServer() {
         }
     });
 
+    // Get spending trend data (week or month)
+    app.get('/spending-trend', async (req, res) => {
+        const userId = req.session.userId;
+        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+        const period = req.query.period === 'week' ? 'week' : 'month';
+        const now = new Date();
+
+        let start, end;
+        if (period === 'week') {
+            // Start: last Sunday, End: next Sunday
+            const day = now.getDay(); // 0 (Sun) - 6 (Sat)
+            start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - day);
+            end = new Date(start);
+            end.setDate(start.getDate() + 7);
+        } else {
+            // Month
+            start = new Date(now.getFullYear(), now.getMonth(), 1);
+            end = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+        }
+        const startStr = start.toISOString().slice(0, 10);
+        const endStr = end.toISOString().slice(0, 10);
+
+        try {
+            // Get daily spending (negative amounts) for the period
+            const [rows] = await db.execute(
+                `SELECT DATE(date) as day, ABS(SUM(amount)) as spent
+                FROM transactions
+                WHERE user_id = ? AND date >= ? AND date < ? AND amount < 0
+                GROUP BY day ORDER BY day ASC`,
+                [userId, startStr, endStr]
+            );
+            // Fill in all days (even if $0 spent)
+            const days = [];
+            for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+                const dateStr = d.toISOString().slice(0,10);
+                const found = rows.find(r => r.day === dateStr);
+                days.push({ day: dateStr, spent: found ? found.spent : 0 });
+            }
+            res.json(days);
+        } catch (err) {
+            console.error('Spending trend error:', err);
+            res.status(500).json({ error: 'Failed to get trend data' });
+        }
+    });
+
     app.listen(PORT, () => {
       console.log(`🚀 Server running at http://localhost:${PORT}`);
     });

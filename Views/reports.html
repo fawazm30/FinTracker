@@ -73,6 +73,16 @@
                     <div class="summary-value" id="val-avg">$0</div>
                 </div>
             </div>
+            <div class="trend-section">
+            <div class="trend-header">
+                <h2>Spending Trend</h2>
+                <div class="trend-toggle">
+                    <button id="trend-week" class="active">This Week</button>
+                    <button id="trend-month">This Month</button>
+                </div>
+            </div>
+            <canvas id="spending-trend-chart"></canvas>
+        </div>
             <section class="reports-details">
                 <div class="report-category">
                     <h2>Category Breakdown</h2>
@@ -81,6 +91,7 @@
             </section>
         </div>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
@@ -100,6 +111,63 @@
         }
     }
     window.addEventListener('DOMContentLoaded', loadSummaryCards);
+
+    let spendingTrendChart = null;
+
+    async function loadSpendingTrend(period = 'week') {
+        try {
+            const res = await fetch(`/spending-trend?period=${period}`);
+            if (!res.ok) return;
+            const data = await res.json();
+
+            // Format for Chart.js
+            const labels = data.map(d => d.day.slice(5)); // MM-DD
+            const values = data.map(d => d.spent);
+
+            const ctx = document.getElementById('spending-trend-chart').getContext('2d');
+            if (spendingTrendChart) spendingTrendChart.destroy();
+            spendingTrendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Spent ($)',
+                        data: values,
+                        borderColor: '#e48b26',
+                        backgroundColor: 'rgba(228,139,38,0.1)',
+                        tension: 0.25,
+                        fill: true,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#e48b26'
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { display: false }},
+                        y: { beginAtZero: true, grid: { color: "#eee" } }
+                    }
+                }
+            });
+        } catch (e) {
+            // Optionally handle error
+        }
+    }
+
+    document.getElementById('trend-week').onclick = function() {
+        loadSpendingTrend('week');
+        this.classList.add('active');
+        document.getElementById('trend-month').classList.remove('active');
+    };
+    document.getElementById('trend-month').onclick = function() {
+        loadSpendingTrend('month');
+        this.classList.add('active');
+        document.getElementById('trend-week').classList.remove('active');
+    };
+
+    window.addEventListener('DOMContentLoaded', () => loadSpendingTrend('week'));
     </script>
 </body>
 </html>
