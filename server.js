@@ -400,6 +400,37 @@ async function startServer() {
         }
     });
 
+    // Get category breakdown for current month
+    app.get('/category-breakdown', async (req, res) => {
+        const userId = req.session.userId;
+        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+        // Get current month date range
+        const now = new Date();
+        const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+        const nextMonthFirstDay = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+        const firstDayStr = firstDay.toISOString().slice(0, 10);
+        const nextMonthFirstDayStr = nextMonthFirstDay.toISOString().slice(0, 10);
+
+        try {
+            // Group by category and sum up negative (expense) amounts
+            const [rows] = await db.execute(
+                `SELECT category, ABS(SUM(amount)) AS total
+                FROM transactions
+                WHERE user_id = ? AND date >= ? AND date < ? AND amount < 0
+                GROUP BY category ORDER BY total DESC`,
+                [userId, firstDayStr, nextMonthFirstDayStr]
+            );
+            res.json(rows.map(r => ({
+                category: r.category,
+                total: Number(r.total)
+            })));
+        } catch (err) {
+            console.error('Category breakdown error:', err);
+            res.status(500).json({ error: 'Failed to get category breakdown' });
+        }
+    });
+
     app.listen(PORT, () => {
       console.log(`🚀 Server running at http://localhost:${PORT}`);
     });
