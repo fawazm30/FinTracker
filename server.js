@@ -201,7 +201,7 @@ async function startServer() {
             });
         }
     });
-// Get current month's budget summary
+    // Get current month's budget summary
     app.get('/budget-summary', async (req, res) => {
         const userId = req.session.userId;
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
