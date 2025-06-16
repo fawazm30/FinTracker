@@ -380,8 +380,10 @@ async function startServer() {
             for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
                 const dateStr = d.toISOString().slice(0,10);
                 const found = rows.find(r => r.day === dateStr);
-                days.push({ day: dateStr, spent: found ? found.spent : 0 });
+                days.push({ day: dateStr, spent: found ? Number(found.spent) : 0 });
             }
+            console.log('Spending trend debug:', JSON.stringify(days, null, 2)); // debug
+            console.log('Spending trend raw rows:', rows);
             res.json(days);
         } catch (err) {
             console.error('Spending trend error:', err);
