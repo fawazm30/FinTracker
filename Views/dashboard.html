@@ -125,7 +125,7 @@
 
             if (response.ok) {
                 document.getElementById('transaction-form').reset();
-                fetchTransactions();  // ✅ REFRESH instead of creating element
+                fetchTransactions(); 
             } else {
                 console.error("Error adding transaction");
             }
@@ -231,7 +231,11 @@
                 options: {
                     cutout: '70%',
                     plugins: {
-                        legend: { display: true },
+                        legend: { display: true,
+                            labels: {
+                                color: '#fff',
+                            }
+                         },
                         centerText: { spentValue: spent } // <-- Pass spent value here
                     }
                 },
