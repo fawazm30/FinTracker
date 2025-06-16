@@ -53,12 +53,49 @@
         <div class="profile-container">
             <h1 class="profile-overview" id="welcome-text">Profile Overview</h1>
             <section class="profile-details">
-                <div class="profile-info">
-                    <p>Username: <span id="username"></span></p>
-                    <p>Email: <span id="email"></span></p>
-                </div>
+                <form id="profile-form">
+                    <label for="firstname">First Name:</label>
+                    <input type="text" id="firstname" name="firstname" required>
+                    <br/>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <br/>
+                    <button type="submit">Save Changes</button>
+                </form>
+                <div id="profile-message"></div>
             </section>
         </div>
     </main>
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Fetch and display user info
+        const resp = await fetch('/api/profile');
+        if (resp.ok) {
+            const data = await resp.json();
+            document.getElementById('firstname').value = data.firstname;
+            document.getElementById('email').value = data.email;
+        }
+
+        // Handle form submit
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const firstname = document.getElementById('firstname').value;
+            const email = document.getElementById('email').value;
+            const resp = await fetch('/api/profile', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ firstname, email })
+            });
+            const msgDiv = document.getElementById('profile-message');
+            if (resp.ok) {
+                msgDiv.textContent = 'Profile updated successfully!';
+                msgDiv.style.color = 'green';
+            } else {
+                msgDiv.textContent = 'Update failed.';
+                msgDiv.style.color = 'red';
+            }
+        });
+    });
+    </script>
 </body>
 </html>
