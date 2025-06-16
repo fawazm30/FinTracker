@@ -290,6 +290,59 @@ async function startServer() {
         }
     });
 
+    // Route: Get monthly spending summary
+    app.get('/monthly-summary', async (req, res) => {
+        const userId = req.session.userId;
+        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+        try {
+            // Get current month range
+            const now = new Date();
+            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+            const nextMonthFirstDay = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            const firstDayStr = firstDay.toISOString().slice(0, 10);
+            const nextMonthFirstDayStr = nextMonthFirstDay.toISOString().slice(0, 10);
+
+            // Total spent (expenses are negative, so take absolute)
+            const [totalSpentRow] = await db.execute(
+              `SELECT SUM(amount) AS total_spent FROM transactions
+                WHERE user_id = ? AND date >= ? AND date < ? AND amount < 0`,
+              [userId, firstDayStr, nextMonthFirstDayStr]
+            );
+            const totalSpent = totalSpentRow[0].total_spent ? Math.abs(Number(totalSpentRow[0].total_spent)) : 0;
+
+            // Number of transactions
+            const [countRow] = await db.execute(
+              `SELECT COUNT(*) AS count FROM transactions
+                WHERE user_id = ? AND date >= ? AND date < ?`,
+              [userId, firstDayStr, nextMonthFirstDayStr]
+            );
+            const transactionCount = countRow[0].count || 0;
+
+            // Biggest single expense
+            const [maxRow] = await db.execute(
+              `SELECT MIN(amount) AS biggest_expense FROM transactions
+                WHERE user_id = ? AND date >= ? AND date < ? AND amount < 0`,
+              [userId, firstDayStr, nextMonthFirstDayStr]
+            );
+            const biggestExpense = maxRow[0].biggest_expense ? Math.abs(Number(maxRow[0].biggest_expense)) : 0;
+
+            // Average daily spending (divide totalSpent by days passed in month)
+            const daysSoFar = now.getDate();
+            const avgDaily = daysSoFar > 0 ? (totalSpent / daysSoFar).toFixed(2) : 0;
+
+            res.json({
+                totalSpent,
+                transactionCount,
+                biggestExpense,
+                avgDaily
+            });
+        } catch (err) {
+            console.error('Monthly summary error:', err);
+            res.status(500).json({ error: 'Failed to get summary', details: err.message });
+        }
+    });
+
     app.listen(PORT, () => {
       console.log(`🚀 Server running at http://localhost:${PORT}`);
     });

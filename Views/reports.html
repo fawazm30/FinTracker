@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile | FinTracker</title>
     <link rel="stylesheet" href="/reports.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
     <div class="sidebar">
@@ -49,13 +50,30 @@
         </ul>
     </div>
     <main>
-        <div class="reports-container">
+        <div class="reports-container" data-aos="fade-left" data-aos-duration="1000">
             <h1 class="reports-overview" id="welcome-text">Reports Overview</h1>
-            <section class="reports-details">
-                <div class="report-container">
+            <div class="report-container">
                     <h2>Monthly Spending Report</h2>
-                    <canvas id="monthly-spending-chart"></canvas>
                 </div>
+            <div class="summary-cards">
+                <div class="summary-card" id="card-total-spent">
+                    <div class="summary-label">Total Spent</div>
+                    <div class="summary-value" id="val-total-spent">$0</div>
+                </div>
+                <div class="summary-card" id="card-count">
+                    <div class="summary-label">Transactions</div>
+                    <div class="summary-value" id="val-count">0</div>
+                </div>
+                <div class="summary-card" id="card-biggest">
+                    <div class="summary-label">Biggest Expense</div>
+                    <div class="summary-value" id="val-biggest">$0</div>
+                </div>
+                <div class="summary-card" id="card-avg">
+                    <div class="summary-label">Avg Daily Spending</div>
+                    <div class="summary-value" id="val-avg">$0</div>
+                </div>
+            </div>
+            <section class="reports-details">
                 <div class="report-category">
                     <h2>Category Breakdown</h2>
                     <canvas id="category-breakdown-chart"></canvas>
@@ -63,5 +81,25 @@
             </section>
         </div>
     </main>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+    <script>
+    async function loadSummaryCards() {
+        try {
+            const res = await fetch('/monthly-summary');
+            if (!res.ok) return;
+            const data = await res.json();
+            document.getElementById('val-total-spent').textContent = `$${data.totalSpent.toFixed(2)}`;
+            document.getElementById('val-count').textContent = data.transactionCount;
+            document.getElementById('val-biggest').textContent = `$${data.biggestExpense.toFixed(2)}`;
+            document.getElementById('val-avg').textContent = `$${data.avgDaily}`;
+        } catch (e) {
+            // Optionally handle error or show placeholders
+        }
+    }
+    window.addEventListener('DOMContentLoaded', loadSummaryCards);
+    </script>
 </body>
 </html>

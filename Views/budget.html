@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Budget | FinTracker</title>
     <link rel="stylesheet" href="/budget.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
     <div class="sidebar">
@@ -49,8 +50,7 @@
         </ul>
     </div>
     <main>
-        <h1 class="budget-overview" id="welcome-text">Budget Overview</h1>
-        <section class="budget-overview">
+        <section class="budget-overview" data-aos="fade-down" data-aos-duration="1000">
             <h2>Current Budget <span id="current-month"></span></h2>
             <div class="budget-summary">
                 <div class="budget-details">
@@ -63,7 +63,7 @@
                 </div>
             </div>
         </section>
-        <section class="add-budget">
+        <section class="add-budget" data-aos="fade-up" data-aos-duration="1000">
             <h2>Add your budget</h2>
             <form id="budget-form" method="POST" action="/add-budget" class="form-row">
                 <div class="budget-wrapper input-wrapper">
@@ -193,5 +193,9 @@
             monthSpan.textContent = `(${currentMonth})`;
         }
     });
+    </script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
     </script>
 </body>
