@@ -86,7 +86,7 @@
             <section class="reports-details">
                 <div class="report-category">
                     <h2>Category Breakdown</h2>
-                    <canvas id="category-breakdown-chart"></canvas>
+                    <canvas id="category-breakdown-chart" height="350"></canvas>
                 </div>
             </section>
         </div>
@@ -168,6 +168,59 @@
     };
 
     window.addEventListener('DOMContentLoaded', () => loadSpendingTrend('week'));
+
+    let categoryBreakdownChart = null;
+
+    async function loadCategoryBreakdown() {
+        try {
+            const res = await fetch('/category-breakdown');
+            if (!res.ok) return;
+            const data = await res.json();
+
+            // Sort by total descending, then extract labels and values
+            const labels = data.map(d => d.category);
+            const values = data.map(d => d.total);
+
+            const ctx = document.getElementById('category-breakdown-chart').getContext('2d');
+            if (categoryBreakdownChart) categoryBreakdownChart.destroy();
+            categoryBreakdownChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Spent ($)',
+                        data: values,
+                        backgroundColor: '#e48b26',
+                        borderRadius: 7,
+                        barPercentage: 0.6,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // horizontal bars
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: true }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: { color: "#eee" },
+                            ticks: { color: "#444" }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { color: "#444" }
+                        }
+                    }
+                }
+            });
+        } catch (e) {
+            // Optionally handle error
+        }
+    }
+
+    // Load category breakdown on page load
+    window.addEventListener('DOMContentLoaded', loadCategoryBreakdown);
     </script>
 </body>
 </html>

@@ -122,3 +122,16 @@ body {
     background: #e48b26;
     color: #fff;
 }
+
+.report-category {
+    margin-top: 32px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 24px 24px 24px 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+#category-breakdown-chart {
+    width: 100% !important;
+    min-height: 250px;
+    max-height: 420px;
+}
