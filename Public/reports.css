@@ -52,3 +52,16 @@ body {
     margin-right: 10px;
     fill: #e48b26; /* Change icon color */
 }
+
+.reports-container {
+    background: #ffffff;
+    position: absolute;
+    top: 60px;
+    left: 350px;
+    width: calc(100% - 410px);
+    height: 100vh;
+    padding: 20px;
+    overflow-y: auto;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
