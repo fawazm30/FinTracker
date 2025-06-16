@@ -51,7 +51,7 @@
         </ul>
     </div>
     <main>
-        <div class="dashboard-header-flex">
+        <div class="dashboard-header-flex" data-aos="fade-down" data-aos-duration="1000">
             <div class="dashboard">
                 <h1 id="welcome-text">Welcome!</h1>
                 <p class="dashboard-subtitle">Your spending this month:</p>
@@ -61,7 +61,7 @@
                 <canvas id="dashboardBudgetChart" width="320" height="320"></canvas>
             </div>
         </div>
-        <section class="add-transaction">
+        <section class="add-transaction" data-aos="fade-up" data-aos-duration="1000">
             <h2>Add Transaction</h2>
             <form id="transaction-form" method="POST" action="/add-transaction">
                 <div class="date-wrapper input-wrapper">
