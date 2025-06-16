@@ -55,10 +55,16 @@
             <section class="profile-details">
                 <form id="profile-form">
                     <label for="firstname">First Name:</label>
-                    <input type="text" id="firstname" name="firstname" required>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <input type="text" id="firstname" name="firstname" required readonly>
+                        <button type="button" id="edit-firstname">Edit</button>
+                    </div>
                     <br/>
                     <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <input type="email" id="email" name="email" required readonly>
+                        <button type="button" id="edit-email">Edit</button>
+                    </div>
                     <br/>
                     <button type="submit">Save Changes</button>
                 </form>
@@ -68,15 +74,31 @@
     </main>
     <script>
     document.addEventListener('DOMContentLoaded', async () => {
-        // Fetch and display user info
-        const resp = await fetch('/api/profile');
-        if (resp.ok) {
-            const data = await resp.json();
-            document.getElementById('firstname').value = data.firstname;
-            document.getElementById('email').value = data.email;
+        try {
+            const resp = await fetch('/api/profile');
+            if (resp.ok) {
+                const data = await resp.json();
+                document.getElementById('firstname').value = data.firstname || '';
+                document.getElementById('email').value = data.email || '';
+            } else {
+                // handle not logged in, etc.
+                document.getElementById('profile-message').textContent = 'Could not load user info.';
+            }
+        } catch (e) {
+            document.getElementById('profile-message').textContent = 'Error loading profile.';
         }
 
-        // Handle form submit
+        document.getElementById('edit-firstname').addEventListener('click', () => {
+            const fn = document.getElementById('firstname');
+            fn.readOnly = false;
+            fn.focus();
+        });
+        document.getElementById('edit-email').addEventListener('click', () => {
+            const em = document.getElementById('email');
+            em.readOnly = false;
+            em.focus();
+        });
+
         document.getElementById('profile-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const firstname = document.getElementById('firstname').value;
@@ -90,6 +112,8 @@
             if (resp.ok) {
                 msgDiv.textContent = 'Profile updated successfully!';
                 msgDiv.style.color = 'green';
+                document.getElementById('firstname').readOnly = true;
+                document.getElementById('email').readOnly = true;
             } else {
                 msgDiv.textContent = 'Update failed.';
                 msgDiv.style.color = 'red';
