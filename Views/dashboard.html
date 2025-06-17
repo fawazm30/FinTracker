@@ -98,7 +98,7 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         const name = params.get('firstname');
-        const userId = params.get('userId'); // <- capture userId
+        const userId = params.get('userId'); // Assuming userId is passed in URL
         if (name) {
             document.getElementById('welcome-text').textContent = `Welcome, ${name}!`;
         }
@@ -236,10 +236,10 @@
                                 color: '#fff',
                             }
                          },
-                        centerText: { spentValue: spent } // <-- Pass spent value here
+                        centerText: { spentValue: spent } // Pass spent value to the plugin
                     }
                 },
-                plugins: [centerTextPlugin] // <-- Register the plugin
+                plugins: [centerTextPlugin] // Register the custom plugin
             });
         }
 

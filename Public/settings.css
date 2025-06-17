@@ -136,7 +136,7 @@ body {
     pointer-events: auto;
 }
 
-/* Optionally style the expand button */
+/* style the expand button */
 .expand-btn {
     display: inline-block;
     background: var(--accent, #e48b26);
