@@ -101,6 +101,7 @@
             const res = await fetch('/api/change-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({ oldPassword, newPassword })
             });
             const data = await res.json();
@@ -110,9 +111,7 @@
                 document.getElementById('change-password-form').reset();
             } else {
                 msgDiv.style.color = 'red';
-                if (res.status === 401 && data.error === "Unauthorized") {
-                    msgDiv.textContent = "You must be logged in to change your password.";
-                } else if (data.error === "Current password is incorrect.") {
+                if (data.error === "Current password is incorrect.") {
                     msgDiv.textContent = "Incorrect current password.";
                 } else {
                     msgDiv.textContent = data.error || 'Failed to change password.';
