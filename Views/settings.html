@@ -128,8 +128,7 @@
     document.getElementById('toggle-password-form').onclick = function() {
         const container = document.getElementById('password-form-container');
         container.classList.toggle('collapsed');
-        // Optional: scroll to form when expanded
-        if (!container.classList.contains('collapsed')) {
+        if (!container.classList.contains('collapsed')) { // Expand the form
             container.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     };

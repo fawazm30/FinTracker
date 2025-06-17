@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'Public')));
 app.use('/Views', express.static(path.join(__dirname, 'Views')));
 
-// ✅ Wrap everything in an async function
+// Wrap everything in an async function
 async function startServer() {
   try {
     const db = await mysql.createConnection({
