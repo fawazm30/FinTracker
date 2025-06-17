@@ -102,3 +102,21 @@ body {
     transform: translateY(-2px) scale(1.03);
     outline: none;
 }
+
+#change-password-form input[type="password"] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 6px;
+    margin-bottom: 14px;
+    background: #fff;
+    color: #111;
+    transition: border 0.2s;
+}
+
+#change-password-form input[type="password"]:focus {
+    border: 1.5px solid var(--accent, #e48b26);
+    outline: none;
+}
