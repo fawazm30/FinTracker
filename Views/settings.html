@@ -52,11 +52,59 @@
     <main>
         <div class="settings-container" data-aos="fade-left" data-aos-duration="1000">
             <h1>Settings</h1>
+            <div class="password-change-section">
+            <h2>Change Password</h2>
+            <form id="change-password-form">
+                <label>
+                    Current Password:<br>
+                    <input type="password" id="old-password" required>
+                </label><br><br>
+                <label>
+                    New Password:<br>
+                    <input type="password" id="new-password" required>
+                </label><br><br>
+                <button type="submit">Change Password</button>
+                <label>
+                    Retype New Password:<br>
+                    <input type="password" id="retype-password" required>
+                </label><br><br>
+            </form>
+            <div id="password-change-message"></div>
+        </div>
         </div>
     </main>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
+    </script>
+    <script>
+    document.getElementById('change-password-form').onsubmit = async function(e) {
+        e.preventDefault();
+        const oldPassword = document.getElementById('old-password').value;
+        const newPassword = document.getElementById('new-password').value;
+        const msgDiv = document.getElementById('password-change-message');
+        msgDiv.textContent = '';
+
+        try {
+            const res = await fetch('/api/change-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ oldPassword, newPassword })
+            });
+            const data = await res.json();
+            if (data.success) {
+                msgDiv.style.color = 'green';
+                msgDiv.textContent = 'Password changed successfully.';
+                document.getElementById('change-password-form').reset();
+            } else {
+                msgDiv.style.color = 'red';
+                msgDiv.textContent = data.error || 'Failed to change password.';
+            }
+        } catch (err) {
+            msgDiv.style.color = 'red';
+            msgDiv.textContent = 'Server error. Please try again.';
+        }
+    };
     </script>
 </body>
 </html>
