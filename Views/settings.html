@@ -86,7 +86,6 @@
         const msgDiv = document.getElementById('password-change-message');
         msgDiv.textContent = '';
 
-        // --- Add your validation here, BEFORE the fetch ---
         if (newPassword.length < 8) {
             msgDiv.style.color = 'red';
             msgDiv.textContent = 'New password must be at least 8 characters.';
@@ -97,7 +96,6 @@
             msgDiv.textContent = 'New passwords do not match.';
             return;
         }
-        // --- End validation ---
 
         try {
             const res = await fetch('/api/change-password', {
@@ -112,7 +110,13 @@
                 document.getElementById('change-password-form').reset();
             } else {
                 msgDiv.style.color = 'red';
-                msgDiv.textContent = data.error || 'Failed to change password.';
+                if (res.status === 401 && data.error === "Unauthorized") {
+                    msgDiv.textContent = "You must be logged in to change your password.";
+                } else if (data.error === "Current password is incorrect.") {
+                    msgDiv.textContent = "Incorrect current password.";
+                } else {
+                    msgDiv.textContent = data.error || 'Failed to change password.';
+                }
             }
         } catch (err) {
             msgDiv.style.color = 'red';
