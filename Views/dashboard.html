@@ -63,17 +63,17 @@
         <section class="add-transaction" data-aos="fade-up" data-aos-duration="1000">
             <h2>Add Transaction</h2>
             <form id="transaction-form" method="POST" action="/add-transaction">
-                <div class="date-wrapper input-wrapper">
+                <div class="date-wrapper input-wrapper" data-aos="zoom-in" data-aos-duration="1000">
                     <input id="date-input" type="date" name="date" required />
                 </div>
-                <div class="amount-wrapper input-wrapper">
+                <div class="amount-wrapper input-wrapper" data-aos="zoom-in" data-aos-duration="1200">
                     <span class="dollar-sign">$</span>
                         <input id="amount-input" type="number" name="amount" placeholder="Amount" required />
                 </div>
-                <div class="source-wrapper input-wrapper">
+                <div class="source-wrapper input-wrapper" data-aos="zoom-in" data-aos-duration="1400">
                     <input id="description-input" type="text" name="description" placeholder="Transaction Description"/>
                 </div>
-                <div class="category-wrapper input-wrapper">
+                <div class="category-wrapper input-wrapper" data-aos="zoom-in" data-aos-duration="1600">
                     <select id="category-input" name="category" required>
                         <option value="" disabled selected>Select Category</option>
                         <option value="Work">Work</option>
@@ -86,12 +86,12 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
-                <div class="input-wrapper">
+                <div class="input-wrapper" data-aos="zoom-in" data-aos-duration="1800">
                     <button id="add-transaction-button" type="button">Add Transaction</button>
                 </div>
         </form>
             <h2 class="transaction-header">Transaction History</h2>
-            <div id="transaction-list" class="transaction-history"></div>
+            <div id="transaction-list" class="transaction-history" data-aos="fade-up" data-aos-duration="1000"></div>
         </section>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
