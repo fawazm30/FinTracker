@@ -56,19 +56,19 @@
                     <h2>Monthly Spending Report</h2>
                 </div>
             <div class="summary-cards">
-                <div class="summary-card" id="card-total-spent">
+                <div class="summary-card" id="card-total-spent" data-aos="flip-left" data-aos-duration="1000">
                     <div class="summary-label">Total Spent</div>
                     <div class="summary-value" id="val-total-spent">$0</div>
                 </div>
-                <div class="summary-card" id="card-count">
+                <div class="summary-card" id="card-count" data-aos="flip-right" data-aos-duration="1000">
                     <div class="summary-label">Transactions</div>
                     <div class="summary-value" id="val-count">0</div>
                 </div>
-                <div class="summary-card" id="card-biggest">
+                <div class="summary-card" id="card-biggest" data-aos="flip-left" data-aos-duration="1000">
                     <div class="summary-label">Biggest Expense</div>
                     <div class="summary-value" id="val-biggest">$0</div>
                 </div>
-                <div class="summary-card" id="card-avg">
+                <div class="summary-card" id="card-avg" data-aos="flip-up" data-aos-duration="1000">
                     <div class="summary-label">Avg Daily Spending</div>
                     <div class="summary-value" id="val-avg">$0</div>
                 </div>
@@ -169,6 +169,11 @@
 
     window.addEventListener('DOMContentLoaded', () => loadSpendingTrend('week'));
 
+    // You can define a list of distinct colors or generate them dynamically
+    const categoryColors = [
+        '#e48b26', '#28a745', '#dc3545', '#007bff', '#ffc107', '#17a2b8', '#6f42c1', '#fd7e14'
+    ];
+
     let categoryBreakdownChart = null;
 
     async function loadCategoryBreakdown() {
@@ -190,7 +195,7 @@
                     datasets: [{
                         label: 'Total Spent ($)',
                         data: values,
-                        backgroundColor: '#e48b26',
+                        backgroundColor: categoryColors,
                         borderRadius: 7,
                         barPercentage: 0.6,
                     }]
