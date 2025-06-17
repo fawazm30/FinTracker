@@ -77,13 +77,27 @@
     <script>
         AOS.init();
     </script>
-    <script>
+   <script>
     document.getElementById('change-password-form').onsubmit = async function(e) {
         e.preventDefault();
         const oldPassword = document.getElementById('old-password').value;
         const newPassword = document.getElementById('new-password').value;
+        const retypePassword = document.getElementById('retype-password').value;
         const msgDiv = document.getElementById('password-change-message');
         msgDiv.textContent = '';
+
+        // --- Add your validation here, BEFORE the fetch ---
+        if (newPassword.length < 8) {
+            msgDiv.style.color = 'red';
+            msgDiv.textContent = 'New password must be at least 8 characters.';
+            return;
+        }
+        if (newPassword !== retypePassword) {
+            msgDiv.style.color = 'red';
+            msgDiv.textContent = 'New passwords do not match.';
+            return;
+        }
+        // --- End validation ---
 
         try {
             const res = await fetch('/api/change-password', {
