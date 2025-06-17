@@ -309,6 +309,10 @@ async function startServer() {
             const match = await bcryptjs.compare(oldPassword, user.password);
             if (!match) return res.status(400).json({ error: 'Current password is incorrect.' });
 
+            if (newPassword.length < 8) {
+                return res.status(400).json({ error: 'New password must be at least 8 characters.' });
+            }
+
             const hashedPassword = await bcryptjs.hash(newPassword, 10);
             await db.execute('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, userId]);
             res.json({ success: true });
