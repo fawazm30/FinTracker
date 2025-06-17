@@ -290,6 +290,34 @@ async function startServer() {
         }
     });
 
+        // Change password route
+    app.post('/api/change-password', async (req, res) => {
+        const userId = req.session.userId;
+        const { oldPassword, newPassword } = req.body;
+
+        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+        if (!oldPassword || !newPassword) {
+            return res.status(400).json({ error: 'Both old and new password are required.' });
+        }
+
+        try {
+            // Fetch current user
+            const [rows] = await db.execute('SELECT password FROM users WHERE id = ?', [userId]);
+            if (!rows.length) return res.status(404).json({ error: 'User not found' });
+
+            const user = rows[0];
+            const match = await bcryptjs.compare(oldPassword, user.password);
+            if (!match) return res.status(400).json({ error: 'Current password is incorrect.' });
+
+            const hashedPassword = await bcryptjs.hash(newPassword, 10);
+            await db.execute('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, userId]);
+            res.json({ success: true });
+        } catch (err) {
+            console.error('Change password error:', err);
+            res.status(500).json({ error: 'Server error while changing password.' });
+        }
+    });
+
     // Route: Get monthly spending summary
     app.get('/monthly-summary', async (req, res) => {
         const userId = req.session.userId;
