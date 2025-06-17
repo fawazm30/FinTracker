@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProfileFinTracker</title>
+    <title>Settings | FinTracker</title>
     <link rel="stylesheet" href="/settings.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
@@ -52,25 +52,27 @@
     <main>
         <div class="settings-container" data-aos="fade-left" data-aos-duration="1000">
             <h1>Settings</h1>
-            <div class="password-change-section">
-            <h2>Change Password</h2>
-            <form id="change-password-form">
-                <label>
-                    Current Password:<br>
-                    <input type="password" id="old-password" required>
-                </label><br><br>
-                <label>
-                    New Password:<br>
-                    <input type="password" id="new-password" required>
-                </label><br><br>
-                <label>
-                    Retype New Password:<br>
-                    <input type="password" id="retype-password" required>
-                </label><br><br>
-                <button type="submit">Change Password</button>
-            </form>
-            <div id="password-change-message"></div>
-        </div>
+            <div class="password-change-section" data-aos="zoom-in" data-aos-duration="1000">
+                <button type="button" id="toggle-password-form" class="expand-btn">Change Password</button>
+                <div id="password-form-container" class="collapsed">
+                    <form id="change-password-form">
+                        <label>
+                            Current Password:<br>
+                            <input type="password" id="old-password" required>
+                        </label><br><br>
+                        <label>
+                            New Password:<br>
+                            <input type="password" id="new-password" required>
+                        </label><br><br>
+                        <label>
+                            Retype New Password:<br>
+                            <input type="password" id="retype-password" required>
+                        </label><br><br>
+                        <button type="submit">Save Changes</button>
+                    </form>
+                    <div id="password-change-message"></div>
+                </div>
+            </div>
         </div>
     </main>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -120,6 +122,15 @@
         } catch (err) {
             msgDiv.style.color = 'red';
             msgDiv.textContent = 'Server error. Please try again.';
+        }
+    };
+
+    document.getElementById('toggle-password-form').onclick = function() {
+        const container = document.getElementById('password-form-container');
+        container.classList.toggle('collapsed');
+        // Optional: scroll to form when expanded
+        if (!container.classList.contains('collapsed')) {
+            container.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     };
     </script>

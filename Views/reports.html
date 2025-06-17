@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile | FinTracker</title>
+    <title>Reports | FinTracker</title>
     <link rel="stylesheet" href="/reports.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
@@ -73,16 +73,16 @@
                     <div class="summary-value" id="val-avg">$0</div>
                 </div>
             </div>
-            <div class="trend-section">
-            <div class="trend-header">
-                <h2>Spending Trend</h2>
-                <div class="trend-toggle">
-                    <button id="trend-week" class="active">This Week</button>
-                    <button id="trend-month">This Month</button>
+            <div class="trend-section" data-aos="zoom-in" data-aos-duration="1000">
+                <div class="trend-header">
+                    <h2>Spending Trend</h2>
+                    <div class="trend-toggle">
+                        <button id="trend-week" class="active">This Week</button>
+                        <button id="trend-month">This Month</button>
+                    </div>
                 </div>
+                <canvas id="spending-trend-chart"></canvas>
             </div>
-            <canvas id="spending-trend-chart"></canvas>
-        </div>
             <section class="reports-details">
                 <div class="report-category">
                     <h2>Category Breakdown</h2>
