@@ -15,7 +15,7 @@ app.use(session({
 }));
 
 
-// Middleware
+// Middleware to parse JSON and URL-encoded data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'Public')));
 app.use('/Views', express.static(path.join(__dirname, 'Views')));
@@ -26,12 +26,12 @@ async function startServer() {
     const db = await mysql.createConnection({
         host: process.env.DB_HOST || 'mysql',     
         user: process.env.DB_USER || 'root',
-        password: process.env.DB_PASSWORD || 'root',
+        password: process.env.DB_PASSWORD || 'tetra123',
         database: process.env.DB_NAME || 'fintracker',
         port: 3306                                
     });
 
-    console.log('Connected to MySQL');
+    console.log('Connected to MySQL'); // Debug: Confirm connection
 
     // Debug: List tables
     const [tables] = await db.execute('SHOW TABLES');
@@ -54,7 +54,7 @@ async function startServer() {
     }
 
     app.get('/', (req, res) => {
-      res.redirect('/Views/login.html');
+      res.redirect('/Views/login.html'); // Redirect to login page
     });
 
     // Signup route
@@ -62,22 +62,25 @@ async function startServer() {
       const { firstname, email, password } = req.body;
 
   if (!firstname || !email || !password) {
-    return res.redirect('Views/signup.html?error=empty');
+    return res.redirect('Views/signup.html?error=empty'); // redirect with error
   }
 
   try {
+    // Check if email already exists
     const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
     if (rows.length > 0) {
-      return res.redirect('Views/signup.html?error=email');
+      return res.redirect('Views/signup.html?error=email'); // redirect with email error
     }
 
-    const hashedPassword = await bcryptjs.hash(password, 10); // ✅ hash the password
+    // Check if password is at least 8 characters
+    const hashedPassword = await bcryptjs.hash(password, 10); // hash the password
     await db.execute('INSERT INTO users (firstname, email, password) VALUES (?, ?, ?)', [
       firstname,
       email,
       hashedPassword
     ]);
 
+    // Redirect to login page with success message
     res.redirect('Views/login.html?success=1');
   } catch (err) {
     console.error('Signup Error:', err);
@@ -89,25 +92,32 @@ async function startServer() {
     app.post('/login', async (req, res) => {
       const { email, password } = req.body;
 
+      // Debug: Log input values
       if (!email || !password) {
         return res.redirect('/Views/login.html?error=empty');
       }
 
       try {
+        // Check if user exists
         const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
         const user = rows[0];
 
+        // Debug: Log user and password
         console.log("User from DB:", user);
         console.log("Input password:", password);
 
         if (!user) {
+          // User not found
           return res.redirect('/Views/login.html?error=invalid');
         }
 
+        // Compare password
         const match = await bcryptjs.compare(password, user.password);
         if (!match) {
-          return res.redirect('/Views/login.html?error=invalid');
+          return res.redirect('/Views/login.html?error=invalid'); // redirect with error
         }
+
+        // Password matched, set session
         req.session.userId = user.id;
         res.redirect(`/Views/dashboard.html?firstname=${encodeURIComponent(user.firstname)}`);
       } catch (err) {
@@ -115,8 +125,11 @@ async function startServer() {
         res.status(500).send('Server error during login.');
       }
     });
+
+    // Add transaction route
     app.use(express.json());
     app.post('/add-transaction', async (req, res) => {
+        // Validate request body
         const { date, amount, description, category } = req.body;
         const userId = req.session.userId;
         if (!userId) {
@@ -125,9 +138,11 @@ async function startServer() {
 
         try {
             await db.execute(
+              // Validate date format
                 'INSERT INTO transactions (user_id, date, amount, description, category) VALUES (?, ?, ?, ?, ?)',
                 [userId, date, amount, description, category]
             );
+            // Debug: Log the transaction being added
             res.status(200).json({ message: 'Transaction added' });
         } catch (error) {
             console.error('Error adding transaction:', error);
@@ -159,9 +174,11 @@ async function startServer() {
 
         try {
             await db.execute(
+              // Ensure the transaction belongs to the user
                 'DELETE FROM transactions WHERE id = ? AND user_id = ?',
                 [transactionId, userId]
             );
+            // Debug: Log the transaction being deleted
             res.json({ message: 'Transaction deleted' });
         } catch (err) {
             console.error('Delete error:', err);
@@ -170,9 +187,11 @@ async function startServer() {
     });
     // Set budget for current month
     app.post('/add-budget', async (req, res) => {
+        // Validate request body
         const userId = req.session.userId;
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
+        // Check if amount is provided
         const { amount } = req.body;
         if (!amount) return res.status(400).json({ error: 'Amount required' });
 
@@ -185,11 +204,13 @@ async function startServer() {
             const budgetAmount = Number(amount);
 
             await db.execute(
+              // Insert or update budget for the user and month
                 `INSERT INTO budgets (user_id, month, total_budget)
                 VALUES (?, ?, ?)
                 ON DUPLICATE KEY UPDATE total_budget = VALUES(total_budget)`,
                 [userId, month, budgetAmount]
             );
+            // Debug: Log the budget being set
             res.status(200).json({ message: 'Budget set successfully' });
         } catch (err) {
             console.error('Budget Error:', err);
@@ -240,10 +261,12 @@ async function startServer() {
                 ? Number(budgetRows[0].total_budget) 
                 : 0;
                 
+            // If no spending found, default to 0
             const spent = spentRows[0]?.spent 
                 ? Math.abs(Number(spentRows[0].spent)) 
                 : 0;
             
+            // Debug log
             res.json({
                 totalBudget: budget,
                 spent: spent,
@@ -268,8 +291,10 @@ async function startServer() {
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
         try {
+          // Fetch user profile info
             const [rows] = await db.execute('SELECT firstname, email FROM users WHERE id = ?', [userId]);
             if (rows.length === 0) return res.status(404).json({ error: 'User not found' });
+            // Debug: Log the profile being fetched
             res.json(rows[0]);
         } catch (err) {
             res.status(500).json({ error: 'Server error' });
@@ -283,6 +308,7 @@ async function startServer() {
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
         try {
+            // Validate input
             await db.execute('UPDATE users SET firstname = ?, email = ? WHERE id = ?', [firstname, email, userId]);
             res.json({ success: true });
         } catch (err) {
@@ -295,6 +321,7 @@ async function startServer() {
         const userId = req.session.userId;
         const { oldPassword, newPassword } = req.body;
 
+        // If userId or password is missing
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
         if (!oldPassword || !newPassword) {
             return res.status(400).json({ error: 'Both old and new password are required.' });
@@ -306,9 +333,11 @@ async function startServer() {
             if (!rows.length) return res.status(404).json({ error: 'User not found' });
 
             const user = rows[0];
+            // Checks to see if the users current password matches the stored password
             const match = await bcryptjs.compare(oldPassword, user.password);
             if (!match) return res.status(400).json({ error: 'Current password is incorrect.' });
 
+            // Conditions for the new password
             if (newPassword.length < 8) {
                 return res.status(400).json({ error: 'New password must be at least 8 characters.' });
             }
@@ -322,7 +351,7 @@ async function startServer() {
         }
     });
 
-    // Route: Get monthly spending summary
+    // Route to get monthly spending summary
     app.get('/monthly-summary', async (req, res) => {
         const userId = req.session.userId;
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
@@ -463,14 +492,33 @@ async function startServer() {
         }
     });
 
+    // Delete account route
+    app.post('/api/delete-account', async (req, res) => {
+        const userId = req.session.userId;
+        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+        try {
+            // Delete all transactions for this user
+            await db.execute('DELETE FROM transactions WHERE user_id = ?', [userId]); // delete transactions
+            await db.execute('DELETE FROM budgets WHERE user_id = ?', [userId]); // delete budgets
+            await db.execute('DELETE FROM users WHERE id = ?', [userId]); // delete user
+            req.session.destroy(() => { // destroy session
+                res.json({ success: true }); // respond with success
+            });
+        } catch (err) { // handle errors
+            console.error('Delete account error:', err); 
+            res.status(500).json({ error: 'Server error while deleting account.' });
+        }
+    });
+
     app.listen(PORT, () => {
-      console.log(`🚀 Server running at http://localhost:${PORT}`);
+      console.log(`Server running at http://localhost:${PORT}`); // For simplicity and to see which port my server is running at
     });
 
   } catch (err) {
     console.error('Failed to connect to DB or start server:', err);
   }
 }
-
+// Start the server :)
 startServer();
 

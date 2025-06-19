@@ -8,7 +8,7 @@ services:
     environment:
       - DB_HOST=db
       - DB_USER=root
-      - DB_PASSWORD=example
+      - DB_PASSWORD=tetra123 # Password to access SQL database
       - DB_NAME=fintracker
     depends_on:
       - db
@@ -20,7 +20,7 @@ services:
   db:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: example
+      MYSQL_ROOT_PASSWORD: tetra123
       MYSQL_DATABASE: fintracker
     volumes:
       - mysql_data:/var/lib/mysql
