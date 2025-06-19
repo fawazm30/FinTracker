@@ -8,6 +8,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Sidebar Navigation -->
     <div class="sidebar">
         <div class="logo"></div>
         <ul class="main">
@@ -49,6 +50,7 @@
             </li>
         </ul>
     </div>
+    <!--Budget Skeleton-->
     <main>
         <section class="budget-overview" data-aos="fade-down" data-aos-duration="1000">
             <h2>Current Budget <span id="current-month"></span></h2>
@@ -78,8 +80,9 @@
     </main>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        let budgetChartInstance = null;
+        let budgetChartInstance = null; // Variable to hold the chart instance
 
+        // Function to render the budget chart
         function renderBudgetChart(budget, spent) {
             const ctx = document.getElementById('budgetChart').getContext('2d');
             // Destroy previous chart if it exists for re-rendering
@@ -106,34 +109,37 @@
         }
     </script>
     <script>
+        // Fetch budget summary from the server
         async function fetchBudgetSummary() {
             try {
-                const response = await fetch('/budget-summary');
-                if (!response.ok) {
+                const response = await fetch('/budget-summary'); // Fetch from budget summary endpoint
+                if (!response.ok) { // Check if the response is OK  
                     const errorResponse = await response.json();
                     const errorMsg = errorResponse?.details || errorResponse?.error || 'Unknown error';
                     throw new Error(`Server error: ${errorMsg} (Status: ${response.status})`);
                 }
 
-                const data = await response.json();
-                const { totalBudget, spent, remaining } = data;
+                const data = await response.json(); // Parse the JSON response
+                const { totalBudget, spent, remaining } = data; // Destructure the data
                 
+                // Convert to numbers
                 document.getElementById('total-budget').textContent = totalBudget.toFixed(2);
+                // Convert spent and remaining to numbers as well
                 document.getElementById('spent-amount').textContent = spent.toFixed(2);
 
-                renderBudgetChart(totalBudget, spent);
+                renderBudgetChart(totalBudget, spent); // render budget chart
                 
                 // Color code remaining amount
                 const remainingElement = document.getElementById('remaining-amount');
                 remainingElement.textContent = remaining.toFixed(2);
-                if (remaining < 0) {
+                if (remaining < 0) { // If remaining is negative, show in red
                     remainingElement.style.color = '#dc3545';
-                } else if (remaining < totalBudget * 0.2) {
+                } else if (remaining < totalBudget * 0.2) { // If remaining is less than 20% of total budget, show in yellow
                     remainingElement.style.color = '#ffc107';
-                } else {
-                    remainingElement.style.color = '#28a745';
+                } else { // If remaining is healthy, show in green
+                    remainingElement.style.color = '#28a745'; 
                 }
-            } catch (error) {
+            } catch (error) { // error handling
                 console.error('Budget Error:', error);
                 alert(`Error loading budget information: ${error.message}`);
             }
@@ -143,28 +149,32 @@
         document.getElementById('budget-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            // Get the budget amount from the input field
             const amountInput = document.getElementById('budget-input');
+            // Validate the input
             const amount = parseFloat(amountInput.value);
             
+            // Check if the amount is a valid number and greater than 0
             if (isNaN(amount) || amount <= 0) {
                 alert('Please enter a valid budget amount greater than 0');
                 return;
             }
 
             try {
-                const response = await fetch('/add-budget', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                const response = await fetch('/add-budget', { // Send budget amount to the server
+                    method: 'POST', // POST request
+                    headers: { 'Content-Type': 'application/json' }, // Set content type to JSON
                     body: JSON.stringify({ amount })
                 });
 
                 const result = await response.json();
 
                 // Convert to numbers again for safety
-                const totalBudget = Number(data.totalBudget);
-                const spent = Number(data.spent);
-                const remaining = Number(data.remaining);
+                const totalBudget = Number(result.totalBudget);
+                const spent = Number(result.spent);
+                const remaining = Number(result.remaining);
 
+                // Update the UI with the new budget summary
                 if (response.ok) {
                     alert('Budget set successfully!');
                     await fetchBudgetSummary();
@@ -173,7 +183,7 @@
                     const errorMsg = result.details || result.error || 'Failed to set budget';
                     throw new Error(errorMsg);
                 }
-            } catch (error) {
+            } catch (error) { // Error handling
                 console.error('Save Budget Error:', error);
                 alert(`Error setting budget: ${error.message}`);
             }
@@ -181,14 +191,17 @@
 
         // Initial load
         window.addEventListener('DOMContentLoaded', fetchBudgetSummary);
+        // Update current month display
         document.addEventListener('DOMContentLoaded', function () {
         const monthNames = [
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
         ];
-        const today = new Date();
-        const currentMonth = monthNames[today.getMonth()] + " " + today.getFullYear();
-        const monthSpan = document.getElementById('current-month');
+        const today = new Date(); // Get today's date
+        const currentMonth = monthNames[today.getMonth()] + " " + today.getFullYear(); // Get current month and year
+        const monthSpan = document.getElementById('current-month'); // Get the span element to display the month
+
+        // Set the text content of the span to the current month
         if (monthSpan) {
             monthSpan.textContent = `(${currentMonth})`;
         }

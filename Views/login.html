@@ -8,17 +8,19 @@
     <script type="text/javascript" src="/validation.js" defer></script>
 </head>
 <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const errorBox = document.getElementById('error-message');
-    if (params.get('error') === 'empty') {
-      errorBox.textContent = 'Please enter both email and password.';
-    } else if (params.get('error') === 'invalid') {
-      errorBox.textContent = 'Invalid email or password.';
-    }
-  });
+    // This script checks the URL for error parameters and displays appropriate messages
+    window.addEventListener('DOMContentLoaded', () => { 
+        const params = new URLSearchParams(window.location.search);
+        const errorBox = document.getElementById('error-message');
+        if (params.get('error') === 'empty') {
+            errorBox.textContent = 'Please enter both email and password.';
+        } else if (params.get('error') === 'invalid') {
+            errorBox.textContent = 'Invalid email or password.';
+        }
+    });
 </script>
 
+<!--Login Skeleton-->
 <body>
     <div class="wrapper">
         <h1>FinTracker</h1>

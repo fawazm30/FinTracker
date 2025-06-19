@@ -8,6 +8,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Sidebar Navigation -->
     <div class="sidebar">
         <div class="logo"></div>
         <ul class="main">
@@ -49,6 +50,7 @@
             </li>
         </ul>
     </div>
+    <!-- Settings Skeleton -->
     <main>
         <div class="settings-container" data-aos="fade-left" data-aos-duration="1000">
             <h1>Settings</h1>
@@ -73,6 +75,10 @@
                     <div id="password-change-message"></div>
                 </div>
             </div>
+            <div class="account-delete-section" data-aos="zoom-in" data-aos-duration="1000">
+                <button type="button" id="delete-account-btn" class="danger-btn">Delete Account</button>
+                <div id="delete-account-message"></div>
+            </div>
         </div>
     </main>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -80,58 +86,87 @@
         AOS.init();
     </script>
    <script>
-    document.getElementById('change-password-form').onsubmit = async function(e) {
-        e.preventDefault();
-        const oldPassword = document.getElementById('old-password').value;
-        const newPassword = document.getElementById('new-password').value;
-        const retypePassword = document.getElementById('retype-password').value;
-        const msgDiv = document.getElementById('password-change-message');
-        msgDiv.textContent = '';
+        // Profile Form Functionality
+        document.getElementById('change-password-form').onsubmit = async function(e) {
+            e.preventDefault();
+            const oldPassword = document.getElementById('old-password').value; // Get current password
+            const newPassword = document.getElementById('new-password').value; // Get new password
+            const retypePassword = document.getElementById('retype-password').value; // Get retyped new password
+            const msgDiv = document.getElementById('password-change-message'); // Message div for feedback
+            msgDiv.textContent = ''; // Clear previous messages
 
-        if (newPassword.length < 8) {
-            msgDiv.style.color = 'red';
-            msgDiv.textContent = 'New password must be at least 8 characters.';
-            return;
-        }
-        if (newPassword !== retypePassword) {
-            msgDiv.style.color = 'red';
-            msgDiv.textContent = 'New passwords do not match.';
-            return;
-        }
-
-        try {
-            const res = await fetch('/api/change-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ oldPassword, newPassword })
-            });
-            const data = await res.json();
-            if (data.success) {
-                msgDiv.style.color = 'green';
-                msgDiv.textContent = 'Password changed successfully.';
-                document.getElementById('change-password-form').reset();
-            } else {
+            // Meet validation criteria
+            if (newPassword.length < 8) {
                 msgDiv.style.color = 'red';
-                if (data.error === "Current password is incorrect.") {
-                    msgDiv.textContent = "Incorrect current password.";
-                } else {
-                    msgDiv.textContent = data.error || 'Failed to change password.';
-                }
+                msgDiv.textContent = 'New password must be at least 8 characters.';
+                return;
             }
-        } catch (err) {
-            msgDiv.style.color = 'red';
-            msgDiv.textContent = 'Server error. Please try again.';
-        }
-    };
 
-    document.getElementById('toggle-password-form').onclick = function() {
-        const container = document.getElementById('password-form-container');
-        container.classList.toggle('collapsed');
-        if (!container.classList.contains('collapsed')) { // Expand the form
-            container.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    };
+            // Check if new password matches retype password
+            if (newPassword !== retypePassword) {
+                msgDiv.style.color = 'red';
+                msgDiv.textContent = 'New passwords do not match.';
+                return;
+            }
+
+            // Send request to change password
+            try {
+                const res = await fetch('/api/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ oldPassword, newPassword })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    msgDiv.style.color = 'green';
+                    msgDiv.textContent = 'Password changed successfully.';
+                    document.getElementById('change-password-form').reset();
+                } else {
+                    msgDiv.style.color = 'red';
+                    if (data.error === "Current password is incorrect.") {
+                        msgDiv.textContent = "Incorrect current password.";
+                    } else {
+                        msgDiv.textContent = data.error || 'Failed to change password.';
+                    }
+                }
+            } catch (err) {
+                msgDiv.style.color = 'red';
+                msgDiv.textContent = 'Server error. Please try again.';
+            }
+        };
+
+        // Toggle Password Form Visibility
+        document.getElementById('toggle-password-form').onclick = function() {
+            const container = document.getElementById('password-form-container');
+            container.classList.toggle('collapsed');
+            if (!container.classList.contains('collapsed')) { // Expand the form
+                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        };
+
+        // Delete Account :(
+        document.getElementById('delete-account-btn').onclick = async function() {
+            if (!confirm('Are you sure you want to delete your account? This cannot be undone!')) return;
+            const msgDiv = document.getElementById('delete-account-message');
+            msgDiv.textContent = '';
+            try {
+                const res = await fetch('/api/delete-account', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                if (data.success) {
+                    window.location.href = '/Views/login.html?deleted=1';
+                } else {
+                    msgDiv.style.color = 'red';
+                    msgDiv.textContent = data.error || 'Failed to delete account.';
+                }
+            } catch (err) {
+                msgDiv.style.color = 'red';
+                msgDiv.textContent = 'Server error. Please try again.';
+            }
+        };
     </script>
 </body>
 </html>

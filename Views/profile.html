@@ -8,6 +8,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Sidebar Navigation -->
     <div class="sidebar">
         <div class="logo"></div>
         <ul class="main">
@@ -49,10 +50,11 @@
             </li>
         </ul>
     </div>
+    <!-- Profile Skeleton -->
     <main>
         <div class="profile-container" data-aos="fade-left" data-aos-duration="1000">
             <h1 class="profile-overview" id="welcome-text">Profile Overview</h1>
-            <section class="profile-details">
+            <section class="profile-details" data-aos="fade-left" data-aos-duration="1200">
                <form id="profile-form">
                     <label for="firstname">First Name:</label>
                     <div class="field-row">
@@ -64,48 +66,53 @@
                         <input type="email" id="email" name="email" required readonly>
                         <button type="button" class="edit-btn" id="edit-email">Edit</button>
                     </div>
-                    <button class="save-btn" type="submit">Save Changes</button>
+                    <button class="save-btn" type="submit" data-aos="fade-left" data-aos-duration="1200">Save Changes</button>
                 </form>
                 <div id="profile-message"></div>
             </section>
         </div>
     </main>
     <script>
-    document.addEventListener('DOMContentLoaded', async () => {
+        // This script handles the profile form functionality
+        document.addEventListener('DOMContentLoaded', async () => { 
         try {
+            // Fetch user profile data from the server
             const resp = await fetch('/api/profile');
             if (resp.ok) {
                 const data = await resp.json();
-                document.getElementById('firstname').value = data.firstname || '';
-                document.getElementById('email').value = data.email || '';
+                document.getElementById('firstname').value = data.firstname || ''; // Handle missing data
+                document.getElementById('email').value = data.email || ''; 
             } else {
-                // handle not logged in, etc.
+                // If the response is not OK, display an error message
                 document.getElementById('profile-message').textContent = 'Could not load user info.';
             }
         } catch (e) {
             document.getElementById('profile-message').textContent = 'Error loading profile.';
         }
 
+        // Add event listeners for the edit buttons
         document.getElementById('edit-firstname').addEventListener('click', () => {
-            const fn = document.getElementById('firstname');
-            fn.readOnly = false;
-            fn.focus();
+            const fn = document.getElementById('firstname'); // Get the firstname input field
+            fn.readOnly = false; // Make it editable
+            fn.focus(); // Focus on the input field
         });
         document.getElementById('edit-email').addEventListener('click', () => {
-            const em = document.getElementById('email');
-            em.readOnly = false;
-            em.focus();
+            const em = document.getElementById('email'); // Get the email input field
+            em.readOnly = false; // Make it editable
+            em.focus(); // Focus on the input field
         });
 
+        // Handle form submission
         document.getElementById('profile-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const firstname = document.getElementById('firstname').value;
-            const email = document.getElementById('email').value;
-            const resp = await fetch('/api/profile', {
+            const firstname = document.getElementById('firstname').value; // Get the firstname value
+            const email = document.getElementById('email').value; // Get the email value
+            const resp = await fetch('/api/profile', { // Send updated profile data
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ firstname, email })
             });
+            // Display success or error message based on response
             const msgDiv = document.getElementById('profile-message');
             if (resp.ok) {
                 msgDiv.textContent = 'Profile updated successfully!';

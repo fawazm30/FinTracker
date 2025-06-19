@@ -8,6 +8,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Sidebar Navigation -->
     <div class="sidebar">
         <div class="logo"></div>
         <ul class="main">
@@ -17,31 +18,31 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li>
+            <li> <!-- Button for profile page -->
                 <a href="profile.html">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
                     <span>Profile</span>
                 </a>
             </li>
-            <li>
+            <li> <!-- Button for budget page -->
                 <a href="budget.html">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M120-80v-800l60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60v800l-60-60-60 60-60-60-60 60-60-60-60 60-60-60-60 60-60-60-60 60-60-60-60 60Zm120-200h480v-80H240v80Zm0-160h480v-80H240v80Zm0-160h480v-80H240v80Z"/></svg>
                     <span>Budget</span>
                 </a>
             </li>
-            <li>
+            <li> <!-- Button for reports page -->
                 <a href="reports.html">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z"/></svg>
                     <span>Reports</span>
                 </a>
             </li>
-            <li>
+            <li> <!-- Button for settings page -->
                 <a href="settings.html">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm112-260q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Z"/></svg>
                     <span>Settings</span>
                 </a>
             </li>
-            <li>
+            <li> <!-- Button to logout -->
                 <a href="/logout" class="logout">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
                     <span>Logout</span>
@@ -50,6 +51,7 @@
         </ul>
     </div>
     <main>
+        <!-- Dashboard skeleton -->
         <div class="dashboard-header-flex" data-aos="fade-down" data-aos-duration="1000">
             <div class="dashboard">
                 <h1 id="welcome-text">Welcome!</h1>
@@ -60,6 +62,7 @@
                 <canvas id="dashboardBudgetChart" width="320" height="320"></canvas>
             </div>
         </div>
+        <!-- Transaction skeleton -->
         <section class="add-transaction" data-aos="fade-up" data-aos-duration="1000">
             <h2>Add Transaction</h2>
             <form id="transaction-form" method="POST" action="/add-transaction">
@@ -96,60 +99,68 @@
     </main>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const name = params.get('firstname');
+        const params = new URLSearchParams(window.location.search); // Get URL parameters
+        const name = params.get('firstname'); // Assuming firstname is passed in URL
         const userId = params.get('userId'); // Assuming userId is passed in URL
-        if (name) {
+        if (name) { // If name is provided, set welcome text
             document.getElementById('welcome-text').textContent = `Welcome, ${name}!`;
         }
         // Set userId to button data attribute
         document.getElementById('add-transaction-button').dataset.userId = userId;
     </script>
     <script>
+        // Add event listener to the 'add transaction' button
         document.getElementById('add-transaction-button').addEventListener('click', async () => {
-            let dateInput = document.getElementById('date-input').value;
-            const now = new Date();
-            const time = now.toTimeString().split(' ')[0];
-            const date = `${dateInput} ${time}`;
+            let dateInput = document.getElementById('date-input').value; // Get the date input value
+            const now = new Date(); // Get the current date and time
+            const time = now.toTimeString().split(' ')[0]; // Get the current time in HH:MM:SS format
+            const date = `${dateInput} ${time}`; // Combine the date and time
 
-            const amount = parseFloat(document.getElementById('amount-input').value);
-            const description = document.getElementById('description-input').value;
-            const category = document.getElementById('category-input').value;
-            const userId = document.getElementById('add-transaction-button').dataset.userId;
+            const amount = parseFloat(document.getElementById('amount-input').value); // Gets the amount input value and converts it to a float
+            const description = document.getElementById('description-input').value; // Get the description input value
+            const category = document.getElementById('category-input').value; // Get the category input value
+            const userId = document.getElementById('add-transaction-button').dataset.userId; // Get the userId from the button's date attribute
 
+            // Validate the users inputs
             const response = await fetch('/add-transaction', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId, date, amount, description, category })
+                method: 'POST', // Sends a POST request to the server
+                headers: { 'Content-Type': 'application/json' }, // Sets the content type to JSON
+                body: JSON.stringify({ userId, date, amount, description, category }) // Converts the data to a JSON string
             });
 
+            // Check if the response is okay
             if (response.ok) {
                 document.getElementById('transaction-form').reset();
-                fetchTransactions(); 
+                fetchTransactions(); // Refresh the transaction list after adding a new transaction
             } else {
-                console.error("Error adding transaction");
+                console.error("Error adding transaction"); // Error handling
             }
         });
 
     </script>
     <script>
+        // Function to fetch and display the users transactions
         async function fetchTransactions() {
+            // Fetch the users transactions data from the server
             const response = await fetch('/transactions');
+            // Check if the response is okay
             const transactions = await response.json();
 
-            const list = document.getElementById('transaction-list');
+            const list = document.getElementById('transaction-list'); // Get the transaction list element from the HTML
             list.innerHTML = ''; // Clear previous
 
+            // Loop through each transaction and create a list item
             transactions.forEach(tx => {
-                const li = document.createElement('li');
-                li.classList.add('transaction-item');
+                const li = document.createElement('li'); // Create a new list item element
+                li.classList.add('transaction-item'); // Add a class to the list item for styling
 
+                // Determine the class based on the amount
                 const amountClass = tx.amount < 0 ? 'negative' : 'positive';
-                const formattedAmount = tx.amount < 0
-                    ? `-$${Math.abs(tx.amount).toFixed(2)}`
-                    : `$${Math.abs(tx.amount).toFixed(2)}`;
+                const formattedAmount = tx.amount < 0 // Check if the amount is negative
+                    ? `-$${Math.abs(tx.amount).toFixed(2)}` // Format the amount as negative currency
+                    : `$${Math.abs(tx.amount).toFixed(2)}`; // Format the amount as positive currency
 
-        
+                // Set the inner HTML of the list item with transaction details
                 li.innerHTML = `
                     <span class="transaction-date">${new Date(tx.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
                     <span class="transaction-amount ${amountClass}">${formattedAmount}</span>
@@ -161,18 +172,22 @@
                         </svg>
                     </button>
                 `;
-                list.appendChild(li);
+                list.appendChild(li); // Append the list item to the transaction list
             });
         }
 
+        // Function to delete a transaction
         async function deleteTransaction(id) {
+            // Send a DELETE request to the server to delete the transaction
             await fetch(`/transactions/${id}`, { method: 'DELETE' });
-            fetchTransactions(); // Refresh list
+            fetchTransactions(); // Refresh the transaction list
         }
 
+        // Add event listener to the transaction form
         document.getElementById('transaction-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
+            e.preventDefault(); // Prevent the default form submission
 
+            // Get the form values
             const data = {
                 date: this.date.value,
                 amount: this.amount.value,
@@ -180,6 +195,7 @@
                 category: this.category.value
             };
 
+            // Send a POST request to the server to add the transaction
             await fetch('/add-transaction', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -190,10 +206,13 @@
             fetchTransactions(); // update UI
         });
 
-        window.onload = fetchTransactions;
+        window.onload = fetchTransactions; // Fetch transactions when the page loads
 
+        // Dashboard Budget Chart
+        // Initialize Chart.js instance for the dashboard budget chart
         let dashboardBudgetChartInstance = null;
 
+        // Custom plugin to display the spent value in the center of the doughnut chart
         const centerTextPlugin = {
             id: 'centerText',
             afterDraw(chart, args, options) {
@@ -215,8 +234,10 @@
             }
         };
 
+        // Function to render the dashboard budget chart
         function renderDashboardBudgetChart(budget, spent) {
             const ctx = document.getElementById('dashboardBudgetChart').getContext('2d');
+            // Destroy the previous instance if it exists
             if (dashboardBudgetChartInstance) dashboardBudgetChartInstance.destroy();
             dashboardBudgetChartInstance = new Chart(ctx, {
                 type: 'doughnut',
@@ -243,19 +264,22 @@
             });
         }
 
+        // Load the dashboard budget chart data from the server
         async function loadDashboardBudgetChart() {
+            // Fetch the budget summary data from the server
             try {
-                const response = await fetch('/budget-summary');
-                const data = await response.json();
-                renderDashboardBudgetChart(data.totalBudget, data.spent);
+                const response = await fetch('/budget-summary'); // Fetch the endpoint
+                const data = await response.json(); // Parse the JSON response
+                renderDashboardBudgetChart(data.totalBudget, data.spent); // Render the chart with the fetched data
             } catch (e) {
                     // Optionally handle error
                 }
             }
 
+            // Load the dashboard budget chart when the page is ready
             window.addEventListener('DOMContentLoaded', loadDashboardBudgetChart);
     </script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> <!-- AOS library -->
     <script>
         AOS.init();
     </script>

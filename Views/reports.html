@@ -8,6 +8,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Sidebar Navigation -->
     <div class="sidebar">
         <div class="logo"></div>
         <ul class="main">
@@ -49,6 +50,7 @@
             </li>
         </ul>
     </div>
+    <!-- Reports Skeleton -->
     <main>
         <div class="reports-container" data-aos="fade-left" data-aos-duration="1000">
             <h1 class="reports-overview" id="welcome-text">Reports Overview</h1>
@@ -97,135 +99,146 @@
         AOS.init();
     </script>
     <script>
-    async function loadSummaryCards() {
-        try {
-            const res = await fetch('/monthly-summary');
-            if (!res.ok) return;
-            const data = await res.json();
-            document.getElementById('val-total-spent').textContent = `$${data.totalSpent.toFixed(2)}`;
-            document.getElementById('val-count').textContent = data.transactionCount;
-            document.getElementById('val-biggest').textContent = `$${data.biggestExpense.toFixed(2)}`;
-            document.getElementById('val-avg').textContent = `$${data.avgDaily}`;
-        } catch (e) {
-            // Optionally handle error or show placeholders
+        // Load summary cards data
+        async function loadSummaryCards() {
+            try {
+                const res = await fetch('/monthly-summary'); // Fetch monthly summary data from server
+                if (!res.ok) return;
+                const data = await res.json();
+                document.getElementById('val-total-spent').textContent = `$${data.totalSpent.toFixed(2)}`;
+                document.getElementById('val-count').textContent = data.transactionCount;
+                document.getElementById('val-biggest').textContent = `$${data.biggestExpense.toFixed(2)}`;
+                document.getElementById('val-avg').textContent = `$${data.avgDaily}`;
+            } catch (e) {
+                // Optionally handle error or show placeholders
+            }
         }
-    }
-    window.addEventListener('DOMContentLoaded', loadSummaryCards);
 
-    let spendingTrendChart = null;
+        // Load summary cards on page load
+        window.addEventListener('DOMContentLoaded', loadSummaryCards);
 
-    async function loadSpendingTrend(period = 'week') {
-        try {
-            const res = await fetch(`/spending-trend?period=${period}`);
-            if (!res.ok) return;
-            const data = await res.json();
+        let spendingTrendChart = null;
 
-            // Format for Chart.js
-            const labels = data.map(d => d.day.slice(5)); // MM-DD
-            const values = data.map(d => d.spent);
+        // Load spending trend chart data
+        async function loadSpendingTrend(period = 'week') {
+            try {
+                // Fetch spending trend data based on selected period
+                const res = await fetch(`/spending-trend?period=${period}`);
+                if (!res.ok) return;
+                const data = await res.json();
 
-            const ctx = document.getElementById('spending-trend-chart').getContext('2d');
-            if (spendingTrendChart) spendingTrendChart.destroy();
-            spendingTrendChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels,
-                    datasets: [{
-                        label: 'Spent ($)',
-                        data: values,
-                        borderColor: '#e48b26',
-                        backgroundColor: 'rgba(228,139,38,0.1)',
-                        tension: 0.25,
-                        fill: true,
-                        pointRadius: 4,
-                        pointBackgroundColor: '#e48b26'
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { display: false }
+                // Format for Chart.js
+                const labels = data.map(d => d.day.slice(5)); // MM-DD
+                const values = data.map(d => d.spent);
+
+                // Create or update the spending trend chart
+                const ctx = document.getElementById('spending-trend-chart').getContext('2d');
+                if (spendingTrendChart) spendingTrendChart.destroy();
+                spendingTrendChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: 'Spent ($)',
+                            data: values,
+                            borderColor: '#e48b26',
+                            backgroundColor: 'rgba(228,139,38,0.1)',
+                            tension: 0.25,
+                            fill: true,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#e48b26'
+                        }]
                     },
-                    scales: {
-                        x: { grid: { display: false }},
-                        y: { beginAtZero: true, grid: { color: "#eee" } }
-                    }
-                }
-            });
-        } catch (e) {
-            // Optionally handle error
-        }
-    }
-
-    document.getElementById('trend-week').onclick = function() {
-        loadSpendingTrend('week');
-        this.classList.add('active');
-        document.getElementById('trend-month').classList.remove('active');
-    };
-    document.getElementById('trend-month').onclick = function() {
-        loadSpendingTrend('month');
-        this.classList.add('active');
-        document.getElementById('trend-week').classList.remove('active');
-    };
-
-    window.addEventListener('DOMContentLoaded', () => loadSpendingTrend('week'));
-
-    // You can define a list of distinct colors or generate them dynamically
-    const categoryColors = [
-        '#e48b26', '#28a745', '#dc3545', '#007bff', '#ffc107', '#17a2b8', '#6f42c1', '#fd7e14'
-    ];
-
-    let categoryBreakdownChart = null;
-
-    async function loadCategoryBreakdown() {
-        try {
-            const res = await fetch('/category-breakdown');
-            if (!res.ok) return;
-            const data = await res.json();
-
-            // Sort by total descending, then extract labels and values
-            const labels = data.map(d => d.category);
-            const values = data.map(d => d.total);
-
-            const ctx = document.getElementById('category-breakdown-chart').getContext('2d');
-            if (categoryBreakdownChart) categoryBreakdownChart.destroy();
-            categoryBreakdownChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Total Spent ($)',
-                        data: values,
-                        backgroundColor: categoryColors,
-                        borderRadius: 7,
-                        barPercentage: 0.6,
-                    }]
-                },
-                options: {
-                    indexAxis: 'y', // horizontal bars
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { enabled: true }
-                    },
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            grid: { color: "#eee" },
-                            ticks: { color: "#444" }
+                    options: {
+                        plugins: {
+                            legend: { display: false }
                         },
-                        y: {
-                            grid: { display: false },
-                            ticks: { color: "#444" }
+                        scales: {
+                            x: { grid: { display: false }},
+                            y: { beginAtZero: true, grid: { color: "#eee" } }
                         }
                     }
-                }
-            });
-        } catch (e) {
-            // Optionally handle error
+                });
+            } catch (e) {
+                // Optionally handle error
+            }
         }
-    }
 
-    // Load category breakdown on page load
-    window.addEventListener('DOMContentLoaded', loadCategoryBreakdown);
+        // Add event listeners for trend buttons
+        document.getElementById('trend-week').onclick = function() {
+            loadSpendingTrend('week');
+            this.classList.add('active');
+            document.getElementById('trend-month').classList.remove('active');
+        };
+
+        // Load weekly trend by default
+        document.getElementById('trend-month').onclick = function() {
+            loadSpendingTrend('month');
+            this.classList.add('active');
+            document.getElementById('trend-week').classList.remove('active');
+        };
+
+        // Load weekly trend on page load
+        window.addEventListener('DOMContentLoaded', () => loadSpendingTrend('week'));
+
+        // You can define a list of distinct colors or generate them dynamically
+        const categoryColors = [
+            '#e48b26', '#28a745', '#dc3545', '#007bff', '#ffc107', '#17a2b8', '#6f42c1', '#fd7e14'
+        ];
+
+        let categoryBreakdownChart = null;
+
+        // Load category breakdown chart data
+        async function loadCategoryBreakdown() {
+            try {
+                const res = await fetch('/category-breakdown'); // Fetch category breakdown data from server
+                if (!res.ok) return;
+                const data = await res.json();
+
+                // Sort by total descending, then extract labels and values
+                const labels = data.map(d => d.category);
+                const values = data.map(d => d.total);
+
+                const ctx = document.getElementById('category-breakdown-chart').getContext('2d');
+                if (categoryBreakdownChart) categoryBreakdownChart.destroy();
+                categoryBreakdownChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Total Spent ($)',
+                            data: values,
+                            backgroundColor: categoryColors,
+                            borderRadius: 7,
+                            barPercentage: 0.6,
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', // horizontal bars
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: true }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                grid: { color: "#eee" },
+                                ticks: { color: "#444" }
+                            },
+                            y: {
+                                grid: { display: false },
+                                ticks: { color: "#444" }
+                            }
+                        }
+                    }
+                });
+            } catch (e) {
+                // Optionally handle error
+            }
+        }
+
+        // Load category breakdown on page load
+        window.addEventListener('DOMContentLoaded', loadCategoryBreakdown);
     </script>
 </body>
 </html>
