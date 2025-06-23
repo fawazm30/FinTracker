@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "turntable.proxy.rlwy.net",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "FinTracker Database",
+            "username": "root",
+            "database": "railway"
+        }
+    ]
+}
