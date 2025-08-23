@@ -17,6 +17,7 @@ Overall, the most important aspect of this project that I learned is understandi
 If you want to try this website out for yourself, you just need to git clone my repository.
 
 ```git clone https://github.com/fawazm30/FinTracker.git``` 
+
 ```cd FinTracker```
 
 After that, you will need to enter ```docker-compose up``` into the terminal (or ```docker-compose up -d``` if they want to run it in the background). This ensures that the MySQL database exists, is defined, and is also accessible. Afterwards, your terminal should print out your local host link, for example:
